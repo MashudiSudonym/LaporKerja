@@ -72,6 +72,10 @@ LaporKerja adalah aplikasi offline-first untuk freelancer yang memungkinkan peng
    ```
 
 5. **Setup environment files**:
+   - Buat folder `assets/dev` dan `assets/prod` jika belum ada:
+     ```bash
+     mkdir -p assets/dev assets/prod
+     ```
    - Salin file `.env` ke `assets/dev/.env` untuk development
    - Salin file `.env` ke `assets/prod/.env` untuk production
    - Pastikan file `.env` berisi konfigurasi yang diperlukan (misalnya Supabase keys)
