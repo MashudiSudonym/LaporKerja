@@ -3318,6 +3318,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TimeEntriesTable timeEntries = $TimeEntriesTable(this);
   late final $IncomesTable incomes = $IncomesTable(this);
   late final ProjectsDao projectsDao = ProjectsDao(this as AppDatabase);
+  late final ClientsDao clientsDao = ClientsDao(this as AppDatabase);
+  late final TasksDao tasksDao = TasksDao(this as AppDatabase);
+  late final TimeEntriesDao timeEntriesDao = TimeEntriesDao(
+    this as AppDatabase,
+  );
+  late final IncomesDao incomesDao = IncomesDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();

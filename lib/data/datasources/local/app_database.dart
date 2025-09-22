@@ -6,6 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import 'dao/projects_dao.dart';
+import 'dao/clients_dao.dart';
+import 'dao/tasks_dao.dart';
+import 'dao/time_entries_dao.dart';
+import 'dao/incomes_dao.dart';
 import '../../models/local/clients.dart';
 import '../../models/local/incomes.dart';
 import '../../models/local/projects.dart';
@@ -14,14 +18,10 @@ import '../../models/local/time_entries.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [
-  Clients,
-  Projects,
-  Tasks,
-  TimeEntries,
-  Incomes,
-],
-daos: [ProjectsDao])
+@DriftDatabase(
+  tables: [Clients, Projects, Tasks, TimeEntries, Incomes],
+  daos: [ProjectsDao, ClientsDao, TasksDao, TimeEntriesDao, IncomesDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase._internal() : super(_openConnection());
 
