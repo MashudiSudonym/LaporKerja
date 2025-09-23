@@ -4,7 +4,7 @@ import 'package:lapor_kerja/core/utils/result.dart';
 void main() {
   group('Result', () {
     test('Result.success creates Success instance', () {
-      const result = Result<int>.success(42);
+      final result = Result<int>.success(42);
       expect(result, isA<Success<int>>());
       expect(result.isSuccess, true);
       expect(result.isFailed, false);
@@ -13,7 +13,7 @@ void main() {
     });
 
     test('Result.failed creates Failed instance', () {
-      const result = Result<int>.failed('Error message');
+      final result = Result<int>.failed('Error message');
       expect(result, isA<Failed<int>>());
       expect(result.isSuccess, false);
       expect(result.isFailed, true);
