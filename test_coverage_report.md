@@ -61,6 +61,7 @@
 - All executable code lines are fully covered (100%)
 - Abstract interfaces are tested through mock implementations
 - Generated code from Freezed is included in coverage
+- Repository interfaces now use Result<T> for error handling in Future methods
 - Data layer (Drift models/DAOs) and presentation layer are not yet tested
 - Bootstrap and main application files are not tested
 - HTML coverage report available in `coverage/html/index.html`

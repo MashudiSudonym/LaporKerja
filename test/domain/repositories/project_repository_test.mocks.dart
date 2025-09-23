@@ -5,9 +5,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:lapor_kerja/core/utils/result.dart' as _i5;
 import 'package:lapor_kerja/domain/entities/project_entity.dart' as _i4;
 import 'package:lapor_kerja/domain/repositories/project_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -40,56 +42,80 @@ class MockProjectRepository extends _i1.Mock implements _i2.ProjectRepository {
           as _i3.Stream<List<_i4.ProjectEntity>>);
 
   @override
-  _i3.Future<_i4.ProjectEntity?> getProjectById(int? id) =>
+  _i3.Future<_i5.Result<_i4.ProjectEntity>> getProjectById(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getProjectById, [id]),
-            returnValue: _i3.Future<_i4.ProjectEntity?>.value(),
-          )
-          as _i3.Future<_i4.ProjectEntity?>);
-
-  @override
-  _i3.Future<void> createProject(_i4.ProjectEntity? project) =>
-      (super.noSuchMethod(
-            Invocation.method(#createProject, [project]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateProject(_i4.ProjectEntity? project) =>
-      (super.noSuchMethod(
-            Invocation.method(#updateProject, [project]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> softDeleteProject(int? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#softDeleteProject, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.ProjectEntity>> getUnsyncedProjects() =>
-      (super.noSuchMethod(
-            Invocation.method(#getUnsyncedProjects, []),
-            returnValue: _i3.Future<List<_i4.ProjectEntity>>.value(
-              <_i4.ProjectEntity>[],
+            returnValue: _i3.Future<_i5.Result<_i4.ProjectEntity>>.value(
+              _i6.dummyValue<_i5.Result<_i4.ProjectEntity>>(
+                this,
+                Invocation.method(#getProjectById, [id]),
+              ),
             ),
           )
-          as _i3.Future<List<_i4.ProjectEntity>>);
+          as _i3.Future<_i5.Result<_i4.ProjectEntity>>);
 
   @override
-  _i3.Future<void> markProjectAsSynced(int? id) =>
+  _i3.Future<_i5.Result<void>> createProject(_i4.ProjectEntity? project) =>
+      (super.noSuchMethod(
+            Invocation.method(#createProject, [project]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#createProject, [project]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> updateProject(_i4.ProjectEntity? project) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateProject, [project]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#updateProject, [project]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> softDeleteProject(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#softDeleteProject, [id]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#softDeleteProject, [id]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<List<_i4.ProjectEntity>>> getUnsyncedProjects() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUnsyncedProjects, []),
+            returnValue: _i3.Future<_i5.Result<List<_i4.ProjectEntity>>>.value(
+              _i6.dummyValue<_i5.Result<List<_i4.ProjectEntity>>>(
+                this,
+                Invocation.method(#getUnsyncedProjects, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<List<_i4.ProjectEntity>>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> markProjectAsSynced(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#markProjectAsSynced, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#markProjectAsSynced, [id]),
+              ),
+            ),
           )
-          as _i3.Future<void>);
+          as _i3.Future<_i5.Result<void>>);
 }

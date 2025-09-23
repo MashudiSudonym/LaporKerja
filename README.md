@@ -38,6 +38,7 @@ LaporKerja adalah aplikasi offline-first untuk freelancer yang memungkinkan peng
 - **Database Lokal**: Drift (SQLite-based, type-safe)
 - **State Management**: Riverpod dengan riverpod_generator
 - **Data Models**: Freezed untuk immutable classes
+- **Error Handling**: Result<T> untuk type-safe error handling di domain layer
 - **Architecture**: Offline-first (local-first, background sync)
 
 ## Persyaratan Sistem
@@ -176,7 +177,7 @@ lapor_kerja/
 - **Types**: Gunakan tipe eksplisit untuk public APIs, `const` untuk konstanta compile-time
 - **Widgets**: Gunakan `const` constructors jika memungkinkan, prefer `StatelessWidget` over `StatefulWidget`
 - **State management**: Gunakan Riverpod providers, hindari setState di widget kompleks
-- **Error handling**: Gunakan try-catch untuk operasi async, throw custom exceptions
+- **Error handling**: Gunakan `Result<T>` untuk operasi async di repositories, try-catch untuk operasi lain, throw custom exceptions
 - **Annotations**: Gunakan `@freezed` untuk data classes, `@JsonSerializable` untuk JSON models, `@DriftTable` untuk database entities
 - **Formatting**: Ikuti output dartfmt, indentasi 2-spasi, batas 80 karakter per baris
 - **Documentation**: Gunakan `///` untuk public APIs, hindari komentar inline kecuali logika kompleks

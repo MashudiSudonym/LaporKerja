@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/domain/entities/income_entity.dart';
 import 'package:lapor_kerja/domain/repositories/income_repository.dart';
 
@@ -12,6 +13,9 @@ void main() {
 
   setUp(() {
     mockIncomeRepository = MockIncomeRepository();
+    provideDummy<Result<IncomeEntity>>(Result.failed('dummy'));
+    provideDummy<Result<void>>(Result.failed('dummy'));
+    provideDummy<Result<List<IncomeEntity>>>(Result.failed('dummy'));
   });
 
   group('IncomeRepository', () {
@@ -37,37 +41,39 @@ void main() {
     });
 
     test('should get income by id', () async {
-      when(mockIncomeRepository.getIncomeById(1)).thenAnswer((_) async => testIncome);
+      when(mockIncomeRepository.getIncomeById(1)).thenAnswer((_) async => Result.success(testIncome));
       final result = await mockIncomeRepository.getIncomeById(1);
-      expect(result, testIncome);
+      expect(result.isSuccess, true);
+      expect(result.resultValue, testIncome);
     });
 
     test('should create income', () async {
-      when(mockIncomeRepository.createIncome(testIncome)).thenAnswer((_) async => {});
+      when(mockIncomeRepository.createIncome(testIncome)).thenAnswer((_) async => Result.success(null));
       await mockIncomeRepository.createIncome(testIncome);
       verify(mockIncomeRepository.createIncome(testIncome)).called(1);
     });
 
     test('should update income', () async {
-      when(mockIncomeRepository.updateIncome(testIncome)).thenAnswer((_) async => {});
+      when(mockIncomeRepository.updateIncome(testIncome)).thenAnswer((_) async => Result.success(null));
       await mockIncomeRepository.updateIncome(testIncome);
       verify(mockIncomeRepository.updateIncome(testIncome)).called(1);
     });
 
     test('should soft delete income', () async {
-      when(mockIncomeRepository.softDeleteIncome(1)).thenAnswer((_) async => {});
+      when(mockIncomeRepository.softDeleteIncome(1)).thenAnswer((_) async => Result.success(null));
       await mockIncomeRepository.softDeleteIncome(1);
       verify(mockIncomeRepository.softDeleteIncome(1)).called(1);
     });
 
     test('should get unsynced incomes', () async {
-      when(mockIncomeRepository.getUnsyncedIncomes()).thenAnswer((_) async => [testIncome]);
+      when(mockIncomeRepository.getUnsyncedIncomes()).thenAnswer((_) async => Result.success([testIncome]));
       final result = await mockIncomeRepository.getUnsyncedIncomes();
-      expect(result, [testIncome]);
+      expect(result.isSuccess, true);
+      expect(result.resultValue, [testIncome]);
     });
 
     test('should mark income as synced', () async {
-      when(mockIncomeRepository.markIncomeAsSynced(1)).thenAnswer((_) async => {});
+      when(mockIncomeRepository.markIncomeAsSynced(1)).thenAnswer((_) async => Result.success(null));
       await mockIncomeRepository.markIncomeAsSynced(1);
       verify(mockIncomeRepository.markIncomeAsSynced(1)).called(1);
     });

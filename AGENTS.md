@@ -16,7 +16,7 @@
 - **Types**: Use explicit types for public APIs, `const` for compile-time constants
 - **Widgets**: Use `const` constructors when possible, prefer `StatelessWidget` over `StatefulWidget`
 - **State management**: Use Riverpod providers, avoid setState in complex widgets
-- **Error handling**: Use try-catch for async operations, throw custom exceptions
+- **Error handling**: Use `Result<T>` for repository operations, try-catch for other async operations, throw custom exceptions
 - **Annotations**: Use `@freezed` for data classes, `@JsonSerializable` for JSON models, `@DriftTable` for database entities
 - **Formatting**: Follow dartfmt output, 2-space indentation, 80-char line limit
 - **Documentation**: Use `///` for public APIs, avoid inline comments unless complex logic
@@ -27,4 +27,5 @@
 - **Local Database**: Drift (SQLite-based, type-safe)
 - **State Management**: Riverpod with riverpod_generator
 - **Data Models**: Freezed for immutable classes
+- **Error Handling**: Result<T> for type-safe error handling in domain layer
 - **Architecture**: Offline-first (local-first, background sync)

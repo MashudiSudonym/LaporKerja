@@ -5,9 +5,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:lapor_kerja/core/utils/result.dart' as _i5;
 import 'package:lapor_kerja/domain/entities/income_entity.dart' as _i4;
 import 'package:lapor_kerja/domain/repositories/income_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -48,56 +50,80 @@ class MockIncomeRepository extends _i1.Mock implements _i2.IncomeRepository {
           as _i3.Stream<List<_i4.IncomeEntity>>);
 
   @override
-  _i3.Future<_i4.IncomeEntity?> getIncomeById(int? id) =>
+  _i3.Future<_i5.Result<_i4.IncomeEntity>> getIncomeById(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getIncomeById, [id]),
-            returnValue: _i3.Future<_i4.IncomeEntity?>.value(),
-          )
-          as _i3.Future<_i4.IncomeEntity?>);
-
-  @override
-  _i3.Future<void> createIncome(_i4.IncomeEntity? income) =>
-      (super.noSuchMethod(
-            Invocation.method(#createIncome, [income]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateIncome(_i4.IncomeEntity? income) =>
-      (super.noSuchMethod(
-            Invocation.method(#updateIncome, [income]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> softDeleteIncome(int? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#softDeleteIncome, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.IncomeEntity>> getUnsyncedIncomes() =>
-      (super.noSuchMethod(
-            Invocation.method(#getUnsyncedIncomes, []),
-            returnValue: _i3.Future<List<_i4.IncomeEntity>>.value(
-              <_i4.IncomeEntity>[],
+            returnValue: _i3.Future<_i5.Result<_i4.IncomeEntity>>.value(
+              _i6.dummyValue<_i5.Result<_i4.IncomeEntity>>(
+                this,
+                Invocation.method(#getIncomeById, [id]),
+              ),
             ),
           )
-          as _i3.Future<List<_i4.IncomeEntity>>);
+          as _i3.Future<_i5.Result<_i4.IncomeEntity>>);
 
   @override
-  _i3.Future<void> markIncomeAsSynced(int? id) =>
+  _i3.Future<_i5.Result<void>> createIncome(_i4.IncomeEntity? income) =>
+      (super.noSuchMethod(
+            Invocation.method(#createIncome, [income]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#createIncome, [income]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> updateIncome(_i4.IncomeEntity? income) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateIncome, [income]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#updateIncome, [income]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> softDeleteIncome(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#softDeleteIncome, [id]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#softDeleteIncome, [id]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<List<_i4.IncomeEntity>>> getUnsyncedIncomes() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUnsyncedIncomes, []),
+            returnValue: _i3.Future<_i5.Result<List<_i4.IncomeEntity>>>.value(
+              _i6.dummyValue<_i5.Result<List<_i4.IncomeEntity>>>(
+                this,
+                Invocation.method(#getUnsyncedIncomes, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<List<_i4.IncomeEntity>>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> markIncomeAsSynced(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#markIncomeAsSynced, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#markIncomeAsSynced, [id]),
+              ),
+            ),
           )
-          as _i3.Future<void>);
+          as _i3.Future<_i5.Result<void>>);
 }

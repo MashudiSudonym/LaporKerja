@@ -1,11 +1,12 @@
+import '../../core/utils/result.dart';
 import '../../domain/entities/project_entity.dart';
 
 abstract interface class ProjectRepository {
   Stream<List<ProjectEntity>> watchAllProjects();
-  Future<ProjectEntity?> getProjectById(int id);
-  Future<void> createProject(ProjectEntity project);
-  Future<void> updateProject(ProjectEntity project);
-  Future<void> softDeleteProject(int id);
-  Future<List<ProjectEntity>> getUnsyncedProjects();
-  Future<void> markProjectAsSynced(int id);
+  Future<Result<ProjectEntity>> getProjectById(int id);
+  Future<Result<void>> createProject(ProjectEntity project);
+  Future<Result<void>> updateProject(ProjectEntity project);
+  Future<Result<void>> softDeleteProject(int id);
+  Future<Result<List<ProjectEntity>>> getUnsyncedProjects();
+  Future<Result<void>> markProjectAsSynced(int id);
 }

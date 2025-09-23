@@ -77,6 +77,9 @@
 - **Freezed** untuk model data immutable
 - **build_runner** sebagai alat code generation utama
 
+### Error Handling
+- **Result<T>** untuk type-safe error handling di domain layer repositories
+
 ## Analisis Tech Stack
 
 | Komponen | Kelebihan | Pertimbangan | Peran |

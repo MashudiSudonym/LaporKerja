@@ -1,17 +1,23 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/domain/entities/client_entity.dart';
 import 'package:lapor_kerja/domain/repositories/client_repository.dart';
 
 @GenerateMocks([ClientRepository])
 import 'client_repository_test.mocks.dart';
 
+import 'package:mockito/mockito.dart';
+
 void main() {
   late MockClientRepository mockClientRepository;
 
   setUp(() {
     mockClientRepository = MockClientRepository();
+    provideDummy<Result<ClientEntity>>(Result.failed('dummy'));
+    provideDummy<Result<void>>(Result.failed('dummy'));
+    provideDummy<Result<List<ClientEntity>>>(Result.failed('dummy'));
   });
 
   group('ClientRepository', () {
@@ -30,37 +36,39 @@ void main() {
     });
 
     test('should get client by id', () async {
-      when(mockClientRepository.getClientById(1)).thenAnswer((_) async => testClient);
+      when(mockClientRepository.getClientById(1)).thenAnswer((_) async => Result.success(testClient));
       final result = await mockClientRepository.getClientById(1);
-      expect(result, testClient);
+      expect(result.isSuccess, true);
+      expect(result.resultValue, testClient);
     });
 
     test('should create client', () async {
-      when(mockClientRepository.createClient(testClient)).thenAnswer((_) async => {});
+      when(mockClientRepository.createClient(testClient)).thenAnswer((_) async => Result.success(null));
       await mockClientRepository.createClient(testClient);
       verify(mockClientRepository.createClient(testClient)).called(1);
     });
 
     test('should update client', () async {
-      when(mockClientRepository.updateClient(testClient)).thenAnswer((_) async => {});
+      when(mockClientRepository.updateClient(testClient)).thenAnswer((_) async => Result.success(null));
       await mockClientRepository.updateClient(testClient);
       verify(mockClientRepository.updateClient(testClient)).called(1);
     });
 
     test('should soft delete client', () async {
-      when(mockClientRepository.softDeleteClient(1)).thenAnswer((_) async => {});
+      when(mockClientRepository.softDeleteClient(1)).thenAnswer((_) async => Result.success(null));
       await mockClientRepository.softDeleteClient(1);
       verify(mockClientRepository.softDeleteClient(1)).called(1);
     });
 
     test('should get unsynced clients', () async {
-      when(mockClientRepository.getUnsyncedClients()).thenAnswer((_) async => [testClient]);
+      when(mockClientRepository.getUnsyncedClients()).thenAnswer((_) async => Result.success([testClient]));
       final result = await mockClientRepository.getUnsyncedClients();
-      expect(result, [testClient]);
+      expect(result.isSuccess, true);
+      expect(result.resultValue, [testClient]);
     });
 
     test('should mark client as synced', () async {
-      when(mockClientRepository.markClientAsSynced(1)).thenAnswer((_) async => {});
+      when(mockClientRepository.markClientAsSynced(1)).thenAnswer((_) async => Result.success(null));
       await mockClientRepository.markClientAsSynced(1);
       verify(mockClientRepository.markClientAsSynced(1)).called(1);
     });

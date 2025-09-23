@@ -5,10 +5,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:lapor_kerja/core/utils/result.dart' as _i5;
 import 'package:lapor_kerja/domain/entities/time_entry_entity.dart' as _i4;
 import 'package:lapor_kerja/domain/repositories/time_entry_repository.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -42,56 +44,85 @@ class MockTimeEntryRepository extends _i1.Mock
           as _i3.Stream<List<_i4.TimeEntryEntity>>);
 
   @override
-  _i3.Future<_i4.TimeEntryEntity?> getTimeEntryById(int? id) =>
+  _i3.Future<_i5.Result<_i4.TimeEntryEntity>> getTimeEntryById(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getTimeEntryById, [id]),
-            returnValue: _i3.Future<_i4.TimeEntryEntity?>.value(),
-          )
-          as _i3.Future<_i4.TimeEntryEntity?>);
-
-  @override
-  _i3.Future<void> createTimeEntry(_i4.TimeEntryEntity? timeEntry) =>
-      (super.noSuchMethod(
-            Invocation.method(#createTimeEntry, [timeEntry]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateTimeEntry(_i4.TimeEntryEntity? timeEntry) =>
-      (super.noSuchMethod(
-            Invocation.method(#updateTimeEntry, [timeEntry]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> softDeleteTimeEntry(int? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#softDeleteTimeEntry, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.TimeEntryEntity>> getUnsyncedTimeEntries() =>
-      (super.noSuchMethod(
-            Invocation.method(#getUnsyncedTimeEntries, []),
-            returnValue: _i3.Future<List<_i4.TimeEntryEntity>>.value(
-              <_i4.TimeEntryEntity>[],
+            returnValue: _i3.Future<_i5.Result<_i4.TimeEntryEntity>>.value(
+              _i6.dummyValue<_i5.Result<_i4.TimeEntryEntity>>(
+                this,
+                Invocation.method(#getTimeEntryById, [id]),
+              ),
             ),
           )
-          as _i3.Future<List<_i4.TimeEntryEntity>>);
+          as _i3.Future<_i5.Result<_i4.TimeEntryEntity>>);
 
   @override
-  _i3.Future<void> markTimeEntryAsSynced(int? id) =>
+  _i3.Future<_i5.Result<void>> createTimeEntry(
+    _i4.TimeEntryEntity? timeEntry,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#createTimeEntry, [timeEntry]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#createTimeEntry, [timeEntry]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> updateTimeEntry(
+    _i4.TimeEntryEntity? timeEntry,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateTimeEntry, [timeEntry]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#updateTimeEntry, [timeEntry]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> softDeleteTimeEntry(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#softDeleteTimeEntry, [id]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#softDeleteTimeEntry, [id]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<List<_i4.TimeEntryEntity>>> getUnsyncedTimeEntries() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUnsyncedTimeEntries, []),
+            returnValue:
+                _i3.Future<_i5.Result<List<_i4.TimeEntryEntity>>>.value(
+                  _i6.dummyValue<_i5.Result<List<_i4.TimeEntryEntity>>>(
+                    this,
+                    Invocation.method(#getUnsyncedTimeEntries, []),
+                  ),
+                ),
+          )
+          as _i3.Future<_i5.Result<List<_i4.TimeEntryEntity>>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> markTimeEntryAsSynced(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#markTimeEntryAsSynced, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#markTimeEntryAsSynced, [id]),
+              ),
+            ),
           )
-          as _i3.Future<void>);
+          as _i3.Future<_i5.Result<void>>);
 }

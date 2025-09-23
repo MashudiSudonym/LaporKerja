@@ -5,9 +5,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:lapor_kerja/core/utils/result.dart' as _i5;
 import 'package:lapor_kerja/domain/entities/task_entity.dart' as _i4;
 import 'package:lapor_kerja/domain/repositories/task_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -40,56 +42,80 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
           as _i3.Stream<List<_i4.TaskEntity>>);
 
   @override
-  _i3.Future<_i4.TaskEntity?> getTaskById(int? id) =>
+  _i3.Future<_i5.Result<_i4.TaskEntity>> getTaskById(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getTaskById, [id]),
-            returnValue: _i3.Future<_i4.TaskEntity?>.value(),
-          )
-          as _i3.Future<_i4.TaskEntity?>);
-
-  @override
-  _i3.Future<void> createTask(_i4.TaskEntity? task) =>
-      (super.noSuchMethod(
-            Invocation.method(#createTask, [task]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateTask(_i4.TaskEntity? task) =>
-      (super.noSuchMethod(
-            Invocation.method(#updateTask, [task]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> softDeleteTask(int? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#softDeleteTask, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.TaskEntity>> getUnsyncedTasks() =>
-      (super.noSuchMethod(
-            Invocation.method(#getUnsyncedTasks, []),
-            returnValue: _i3.Future<List<_i4.TaskEntity>>.value(
-              <_i4.TaskEntity>[],
+            returnValue: _i3.Future<_i5.Result<_i4.TaskEntity>>.value(
+              _i6.dummyValue<_i5.Result<_i4.TaskEntity>>(
+                this,
+                Invocation.method(#getTaskById, [id]),
+              ),
             ),
           )
-          as _i3.Future<List<_i4.TaskEntity>>);
+          as _i3.Future<_i5.Result<_i4.TaskEntity>>);
 
   @override
-  _i3.Future<void> markTaskAsSynced(int? id) =>
+  _i3.Future<_i5.Result<void>> createTask(_i4.TaskEntity? task) =>
+      (super.noSuchMethod(
+            Invocation.method(#createTask, [task]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#createTask, [task]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> updateTask(_i4.TaskEntity? task) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateTask, [task]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#updateTask, [task]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> softDeleteTask(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#softDeleteTask, [id]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#softDeleteTask, [id]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<List<_i4.TaskEntity>>> getUnsyncedTasks() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUnsyncedTasks, []),
+            returnValue: _i3.Future<_i5.Result<List<_i4.TaskEntity>>>.value(
+              _i6.dummyValue<_i5.Result<List<_i4.TaskEntity>>>(
+                this,
+                Invocation.method(#getUnsyncedTasks, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<List<_i4.TaskEntity>>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> markTaskAsSynced(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#markTaskAsSynced, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#markTaskAsSynced, [id]),
+              ),
+            ),
           )
-          as _i3.Future<void>);
+          as _i3.Future<_i5.Result<void>>);
 }

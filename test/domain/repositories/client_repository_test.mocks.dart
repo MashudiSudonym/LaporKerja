@@ -5,9 +5,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:lapor_kerja/core/utils/result.dart' as _i5;
 import 'package:lapor_kerja/domain/entities/client_entity.dart' as _i4;
 import 'package:lapor_kerja/domain/repositories/client_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -40,56 +42,80 @@ class MockClientRepository extends _i1.Mock implements _i2.ClientRepository {
           as _i3.Stream<List<_i4.ClientEntity>>);
 
   @override
-  _i3.Future<_i4.ClientEntity?> getClientById(int? id) =>
+  _i3.Future<_i5.Result<_i4.ClientEntity>> getClientById(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getClientById, [id]),
-            returnValue: _i3.Future<_i4.ClientEntity?>.value(),
-          )
-          as _i3.Future<_i4.ClientEntity?>);
-
-  @override
-  _i3.Future<void> createClient(_i4.ClientEntity? client) =>
-      (super.noSuchMethod(
-            Invocation.method(#createClient, [client]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateClient(_i4.ClientEntity? client) =>
-      (super.noSuchMethod(
-            Invocation.method(#updateClient, [client]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> softDeleteClient(int? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#softDeleteClient, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.ClientEntity>> getUnsyncedClients() =>
-      (super.noSuchMethod(
-            Invocation.method(#getUnsyncedClients, []),
-            returnValue: _i3.Future<List<_i4.ClientEntity>>.value(
-              <_i4.ClientEntity>[],
+            returnValue: _i3.Future<_i5.Result<_i4.ClientEntity>>.value(
+              _i6.dummyValue<_i5.Result<_i4.ClientEntity>>(
+                this,
+                Invocation.method(#getClientById, [id]),
+              ),
             ),
           )
-          as _i3.Future<List<_i4.ClientEntity>>);
+          as _i3.Future<_i5.Result<_i4.ClientEntity>>);
 
   @override
-  _i3.Future<void> markClientAsSynced(int? id) =>
+  _i3.Future<_i5.Result<void>> createClient(_i4.ClientEntity? client) =>
+      (super.noSuchMethod(
+            Invocation.method(#createClient, [client]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#createClient, [client]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> updateClient(_i4.ClientEntity? client) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateClient, [client]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#updateClient, [client]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> softDeleteClient(int? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#softDeleteClient, [id]),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#softDeleteClient, [id]),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<void>>);
+
+  @override
+  _i3.Future<_i5.Result<List<_i4.ClientEntity>>> getUnsyncedClients() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUnsyncedClients, []),
+            returnValue: _i3.Future<_i5.Result<List<_i4.ClientEntity>>>.value(
+              _i6.dummyValue<_i5.Result<List<_i4.ClientEntity>>>(
+                this,
+                Invocation.method(#getUnsyncedClients, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i5.Result<List<_i4.ClientEntity>>>);
+
+  @override
+  _i3.Future<_i5.Result<void>> markClientAsSynced(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#markClientAsSynced, [id]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<_i5.Result<void>>.value(
+              _i6.dummyValue<_i5.Result<void>>(
+                this,
+                Invocation.method(#markClientAsSynced, [id]),
+              ),
+            ),
           )
-          as _i3.Future<void>);
+          as _i3.Future<_i5.Result<void>>);
 }
