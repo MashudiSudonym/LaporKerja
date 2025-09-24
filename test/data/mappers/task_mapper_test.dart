@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lapor_kerja/domain/entities/task_entity.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
-import 'package:lapor_kerja/data/models/local/tasks.dart';
 import 'package:lapor_kerja/data/mappers/task_mapper.dart';
 
 void main() {

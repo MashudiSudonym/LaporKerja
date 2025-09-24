@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lapor_kerja/domain/entities/client_entity.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
-import 'package:lapor_kerja/data/models/local/clients.dart';
 import 'package:lapor_kerja/data/mappers/client_mapper.dart';
 
 void main() {
@@ -31,43 +30,49 @@ void main() {
       expect(entity.isDeleted, false);
     });
 
-    test('toCompanion converts ClientEntity to ClientsCompanion with id > 0', () {
-      final entity = ClientEntity(
-        id: 1,
-        name: 'Test Client',
-        contactInfo: 'test@example.com',
-        createdAt: now,
-        updatedAt: now,
-        isDeleted: false,
-      );
+    test(
+      'toCompanion converts ClientEntity to ClientsCompanion with id > 0',
+      () {
+        final entity = ClientEntity(
+          id: 1,
+          name: 'Test Client',
+          contactInfo: 'test@example.com',
+          createdAt: now,
+          updatedAt: now,
+          isDeleted: false,
+        );
 
-      final companion = entity.toCompanion();
+        final companion = entity.toCompanion();
 
-      expect(companion.id.value, 1);
-      expect(companion.name.value, 'Test Client');
-      expect(companion.contactInfo.value, 'test@example.com');
-      expect(companion.createdAt.value, now);
-      expect(companion.updatedAt.value, now);
-      expect(companion.isDeleted.value, false);
-    });
+        expect(companion.id.value, 1);
+        expect(companion.name.value, 'Test Client');
+        expect(companion.contactInfo.value, 'test@example.com');
+        expect(companion.createdAt.value, now);
+        expect(companion.updatedAt.value, now);
+        expect(companion.isDeleted.value, false);
+      },
+    );
 
-    test('toCompanion converts ClientEntity to ClientsCompanion with id == 0', () {
-      final entity = ClientEntity(
-        id: 0,
-        name: 'New Client',
-        contactInfo: null,
-        createdAt: now,
-        updatedAt: now,
-        isDeleted: false,
-      );
+    test(
+      'toCompanion converts ClientEntity to ClientsCompanion with id == 0',
+      () {
+        final entity = ClientEntity(
+          id: 0,
+          name: 'New Client',
+          contactInfo: null,
+          createdAt: now,
+          updatedAt: now,
+          isDeleted: false,
+        );
 
-      final companion = entity.toCompanion();
+        final companion = entity.toCompanion();
 
-      expect(companion.name.value, 'New Client');
+        expect(companion.name.value, 'New Client');
 
-      expect(companion.createdAt.value, now);
-      expect(companion.updatedAt.value, now);
-      expect(companion.isDeleted.value, false);
-    });
+        expect(companion.createdAt.value, now);
+        expect(companion.updatedAt.value, now);
+        expect(companion.isDeleted.value, false);
+      },
+    );
   });
 }
