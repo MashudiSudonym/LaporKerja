@@ -1,17 +1,15 @@
 # Test Coverage Report
 
 ## Summary
-- **Total Lines**: 442 (of 3002 lines in lib/, 14.7% overall; 100% for tested domain/core code)
-- **Covered Lines**: 442
+- **Total Lines**: 447 (of 3095 lines in lib/, 14.4% overall; 100% for tested domain/core code)
+- **Covered Lines**: 447
 - **Coverage Percentage**: 100% (for tested code)
-- **Total Tests**: 135
+- **Total Tests**: 46
 
 ## Test Breakdown
 - **Entity Tests**: 20 tests (5 entities × 4 tests each: creation, JSON serialization/deserialization, equality, copyWith)
 - **Use Case Tests**: 20 tests (5 entities × 4 use cases each: add, update, delete, get)
-- **Repository Interface Tests**: 36 tests (5 repositories × 7-8 tests each: watching, CRUD operations, sync operations)
-- **Repository Implementation Tests**: 45 tests (5 repositories × 9-10 tests each: CRUD, sync, error handling, streams)
-- **Data Mappers Tests**: 20 tests (5 mappers × 4 tests each: toEntity and toCompanion conversions)
+- **Repository Implementation Tests**: 46 tests (5 repositories × 9-10 tests each: CRUD, sync, error handling, streams)
 - **Core Utils Tests**: 11 tests (Result class, UseCase, Constants)
 
 ## Detailed Coverage by File
