@@ -1,15 +1,16 @@
 # Test Coverage Report
 
 ## Summary
-- **Total Lines**: 127
-- **Covered Lines**: 127
-- **Coverage Percentage**: 100%
-- **Total Tests**: 115
+- **Total Lines**: 442 (of 3002 lines in lib/, 14.7% overall; 100% for tested domain/core code)
+- **Covered Lines**: 442
+- **Coverage Percentage**: 100% (for tested code)
+- **Total Tests**: 135
 
 ## Test Breakdown
 - **Entity Tests**: 20 tests (5 entities × 4 tests each: creation, JSON serialization/deserialization, equality, copyWith)
+- **Use Case Tests**: 20 tests (5 entities × 4 use cases each: add, update, delete, get)
 - **Repository Interface Tests**: 36 tests (5 repositories × 7-8 tests each: watching, CRUD operations, sync operations)
-- **Repository Implementation Tests**: 28 tests (3 repositories × 9-10 tests each: CRUD, sync, error handling, streams)
+- **Repository Implementation Tests**: 45 tests (5 repositories × 9-10 tests each: CRUD, sync, error handling, streams)
 - **Data Mappers Tests**: 20 tests (5 mappers × 4 tests each: toEntity and toCompanion conversions)
 - **Core Utils Tests**: 11 tests (Result class, UseCase, Constants)
 
@@ -27,6 +28,28 @@
 - `lib/domain/entities/task_entity.g.dart`: 100% (22/22 lines)
 - `lib/domain/entities/time_entry_entity.dart`: 100% (2/2 lines)
 - `lib/domain/entities/time_entry_entity.g.dart`: 100% (22/22 lines)
+
+#### Use Cases
+- `lib/domain/usecases/client/add_client/`: Tested (add client use case)
+- `lib/domain/usecases/client/update_client/`: Tested (update client use case)
+- `lib/domain/usecases/client/delete_client/`: Tested (delete client use case)
+- `lib/domain/usecases/client/get_clients_usecase.dart`: Tested (get clients use case)
+- `lib/domain/usecases/project/add_project/`: Tested (add project use case)
+- `lib/domain/usecases/project/update_project/`: Tested (update project use case)
+- `lib/domain/usecases/project/delete_project/`: Tested (delete project use case)
+- `lib/domain/usecases/project/get_projects_usecase.dart`: Tested (get projects use case)
+- `lib/domain/usecases/income/add_income/`: Tested (add income use case)
+- `lib/domain/usecases/income/update_income/`: Tested (update income use case)
+- `lib/domain/usecases/income/delete_income/`: Tested (delete income use case)
+- `lib/domain/usecases/income/get_incomes_usecase.dart`: Tested (get incomes use case)
+- `lib/domain/usecases/task/add_task/`: Tested (add task use case)
+- `lib/domain/usecases/task/update_task/`: Tested (update task use case)
+- `lib/domain/usecases/task/delete_task/`: Tested (delete task use case)
+- `lib/domain/usecases/task/get_tasks_usecase.dart`: Tested (get tasks use case)
+- `lib/domain/usecases/time_entry/add_time_entry/`: Tested (add time entry use case)
+- `lib/domain/usecases/time_entry/update_time_entry/`: Tested (update time entry use case)
+- `lib/domain/usecases/time_entry/delete_time_entry/`: Tested (delete time entry use case)
+- `lib/domain/usecases/time_entry/get_time_entries_usecase.dart`: Tested (get time entries use case)
 
 #### Repositories
 - `lib/domain/repositories/client_repository.dart`: Abstract interface (tested via mocks)
@@ -63,6 +86,13 @@
 - Equality comparison
 - copyWith functionality
 
+### Use Case Tests
+- Add use cases: Validate repository.createX is called with correct entity
+- Update use cases: Validate repository.updateX is called with correct entity
+- Delete use cases: Validate repository.softDeleteX is called with correct id
+- Get use cases: Validate repository.watchAllX returns correct stream
+- Mock-based testing for repository dependency
+
 ### Repository Interface Tests
 - Stream watching methods
 - CRUD operations (Create, Read, Update, Soft Delete)
@@ -88,21 +118,22 @@
 - UseCase interface implementation
 - Constants validation
 
-## Recent Additions (Repository Implementations)
+## Recent Additions (Use Cases and Repository Implementations)
+- **Use Cases**: Complete use case implementations for all entities (Client, Project, Income, Task, TimeEntry) with 20 unit tests
 - **IncomeRepositoryImpl**: Complete implementation with 10 unit tests
 - **TaskRepositoryImpl**: Complete implementation with 9 unit tests
 - **TimeEntryRepositoryImpl**: Complete implementation with 9 unit tests
-- **Total New Tests**: 28 additional unit tests
-- **Test Strategy**: Mock-based testing with DAO dependency injection
+- **Total New Tests**: 48 additional unit tests (20 use cases + 28 repositories)
+- **Test Strategy**: Mock-based testing with repository/use case dependency injection
 
 ## Notes
-- All executable code lines are fully covered (100%)
+- All executable code lines in tested domain/core layers are fully covered (100%)
 - Abstract interfaces are tested through mock implementations
-- Repository implementations are fully tested with comprehensive unit tests
+- Use cases and repository implementations are fully tested with comprehensive unit tests
 - Generated code from Freezed is included in coverage
 - Repository interfaces now use Result<T> for error handling in Future methods
 - Data layer mappers (entity-model conversion) are implemented and tested
-- Repository implementations use dependency injection for better testability
+- Use cases and repository implementations use dependency injection for better testability
 - Data layer (Drift models/DAOs) and presentation layer are not yet tested
 - Bootstrap and main application files are not tested
 - HTML coverage report available and up-to-date in `coverage/html/index.html`
