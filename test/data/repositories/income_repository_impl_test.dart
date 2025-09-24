@@ -1,15 +1,14 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/incomes_dao.dart';
 import 'package:lapor_kerja/data/mappers/income_mapper.dart';
 import 'package:lapor_kerja/data/repositories/income_repository_impl.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/income_entity.dart';
 
-@GenerateMocks([IncomesDao])
+@GenerateMocks([IncomesDao, SupabaseService])
 import 'income_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -33,11 +32,13 @@ extension IncomesCompanionTestHelper on IncomesCompanion {
 
 void main() {
   late MockIncomesDao mockIncomesDao;
+  late MockSupabaseService mockSupabaseService;
   late IncomeRepositoryImpl repository;
 
   setUp(() {
     mockIncomesDao = MockIncomesDao();
-    repository = IncomeRepositoryImpl(mockIncomesDao);
+    mockSupabaseService = MockSupabaseService();
+    repository = IncomeRepositoryImpl(mockIncomesDao, mockSupabaseService);
   });
 
   group('IncomeRepositoryImpl', () {

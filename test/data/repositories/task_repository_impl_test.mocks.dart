@@ -9,6 +9,13 @@ import 'package:drift/drift.dart' as _i3;
 import 'package:drift/src/runtime/executor/stream_queries.dart' as _i4;
 import 'package:lapor_kerja/data/datasources/local/app_database.dart' as _i2;
 import 'package:lapor_kerja/data/datasources/local/dao/tasks_dao.dart' as _i6;
+import 'package:lapor_kerja/data/services/supabase_service.dart' as _i8;
+import 'package:lapor_kerja/domain/repositories/client_repository.dart' as _i10;
+import 'package:lapor_kerja/domain/repositories/income_repository.dart' as _i13;
+import 'package:lapor_kerja/domain/repositories/project_repository.dart' as _i9;
+import 'package:lapor_kerja/domain/repositories/task_repository.dart' as _i11;
+import 'package:lapor_kerja/domain/repositories/time_entry_repository.dart'
+    as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i7;
 
@@ -700,6 +707,62 @@ class MockTasksDao extends _i1.Mock implements _i6.TasksDao {
   _i5.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+}
+
+/// A class which mocks [SupabaseService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSupabaseService extends _i1.Mock implements _i8.SupabaseService {
+  MockSupabaseService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> syncProjects(_i9.ProjectRepository? projectRepository) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncProjects, [projectRepository]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> syncClients(_i10.ClientRepository? clientRepository) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncClients, [clientRepository]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> syncTasks(_i11.TaskRepository? taskRepository) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncTasks, [taskRepository]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> syncTimeEntries(
+    _i12.TimeEntryRepository? timeEntryRepository,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncTimeEntries, [timeEntryRepository]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> syncIncomes(_i13.IncomeRepository? incomeRepository) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncIncomes, [incomeRepository]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )

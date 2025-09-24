@@ -1,15 +1,14 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/time_entries_dao.dart';
 import 'package:lapor_kerja/data/mappers/time_entry_mapper.dart';
 import 'package:lapor_kerja/data/repositories/time_entry_repository_impl.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/time_entry_entity.dart';
 
-@GenerateMocks([TimeEntriesDao])
+@GenerateMocks([TimeEntriesDao, SupabaseService])
 import 'time_entry_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -32,11 +31,13 @@ extension TimeEntriesCompanionTestHelper on TimeEntriesCompanion {
 
 void main() {
   late MockTimeEntriesDao mockTimeEntriesDao;
+  late MockSupabaseService mockSupabaseService;
   late TimeEntryRepositoryImpl repository;
 
   setUp(() {
     mockTimeEntriesDao = MockTimeEntriesDao();
-    repository = TimeEntryRepositoryImpl(mockTimeEntriesDao);
+    mockSupabaseService = MockSupabaseService();
+    repository = TimeEntryRepositoryImpl(mockTimeEntriesDao, mockSupabaseService);
   });
 
   group('TimeEntryRepositoryImpl', () {

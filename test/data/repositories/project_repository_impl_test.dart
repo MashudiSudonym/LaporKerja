@@ -1,23 +1,23 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/projects_dao.dart';
-import 'package:lapor_kerja/data/mappers/project_mapper.dart';
 import 'package:lapor_kerja/data/repositories/project_repository_impl.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/project_entity.dart';
 
-@GenerateMocks([ProjectsDao])
+@GenerateMocks([ProjectsDao, SupabaseService])
 import 'project_repository_impl_test.mocks.dart';
 
 void main() {
   late MockProjectsDao mockProjectsDao;
+  late MockSupabaseService mockSupabaseService;
   late ProjectRepositoryImpl repository;
 
   setUp(() {
     mockProjectsDao = MockProjectsDao();
-    repository = ProjectRepositoryImpl(mockProjectsDao);
+    mockSupabaseService = MockSupabaseService();
+    repository = ProjectRepositoryImpl(mockProjectsDao, mockSupabaseService);
   });
 
   group('ProjectRepositoryImpl', () {
@@ -94,9 +94,6 @@ void main() {
     });
 
     test('should get unsynced projects', () async {
-      // Create a mock Project object
-      final mockProject = testProject; // For simplicity, we'll use the entity
-
       when(mockProjectsDao.getUnsyncedProjects())
           .thenAnswer((_) async => []); // Return empty for this test
 

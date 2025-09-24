@@ -1,15 +1,14 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/tasks_dao.dart';
 import 'package:lapor_kerja/data/mappers/task_mapper.dart';
 import 'package:lapor_kerja/data/repositories/task_repository_impl.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/task_entity.dart';
 
-@GenerateMocks([TasksDao])
+@GenerateMocks([TasksDao, SupabaseService])
 import 'task_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -34,11 +33,13 @@ extension TasksCompanionTestHelper on TasksCompanion {
 
 void main() {
   late MockTasksDao mockTasksDao;
+  late MockSupabaseService mockSupabaseService;
   late TaskRepositoryImpl repository;
 
   setUp(() {
     mockTasksDao = MockTasksDao();
-    repository = TaskRepositoryImpl(mockTasksDao);
+    mockSupabaseService = MockSupabaseService();
+    repository = TaskRepositoryImpl(mockTasksDao, mockSupabaseService);
   });
 
   group('TaskRepositoryImpl', () {

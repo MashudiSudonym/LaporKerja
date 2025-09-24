@@ -1,15 +1,14 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/clients_dao.dart';
 import 'package:lapor_kerja/data/mappers/client_mapper.dart';
 import 'package:lapor_kerja/data/repositories/client_repository_impl.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/client_entity.dart';
 
-@GenerateMocks([ClientsDao])
+@GenerateMocks([ClientsDao, SupabaseService])
 import 'client_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -31,11 +30,13 @@ extension ClientsCompanionTestHelper on ClientsCompanion {
 
 void main() {
   late MockClientsDao mockClientsDao;
+  late MockSupabaseService mockSupabaseService;
   late ClientRepositoryImpl repository;
 
   setUp(() {
     mockClientsDao = MockClientsDao();
-    repository = ClientRepositoryImpl(mockClientsDao);
+    mockSupabaseService = MockSupabaseService();
+    repository = ClientRepositoryImpl(mockClientsDao, mockSupabaseService);
   });
 
   group('ClientRepositoryImpl', () {
