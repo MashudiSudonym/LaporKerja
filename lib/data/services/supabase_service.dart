@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logger/logger.dart';
 
 import '../../domain/repositories/client_repository.dart';
 import '../../domain/repositories/income_repository.dart';
@@ -36,7 +37,7 @@ class SupabaseService {
         await projectRepository.markProjectAsSynced(project.id);
       } catch (e) {
         // Handle error, maybe log or queue
-        print('Failed to sync project ${project.id}: $e');
+        Logger().e('Failed to sync project ${project.id}: $e');
       }
     }
   }
@@ -59,7 +60,7 @@ class SupabaseService {
         }).execute();
         await clientRepository.markClientAsSynced(client.id);
       } catch (e) {
-        print('Failed to sync client ${client.id}: $e');
+        Logger().e('Failed to sync client ${client.id}: $e');
       }
     }
   }
@@ -84,7 +85,7 @@ class SupabaseService {
         }).execute();
         await taskRepository.markTaskAsSynced(task.id);
       } catch (e) {
-        print('Failed to sync task ${task.id}: $e');
+        Logger().e('Failed to sync task ${task.id}: $e');
       }
     }
   }
@@ -108,7 +109,7 @@ class SupabaseService {
         }).execute();
         await timeEntryRepository.markTimeEntryAsSynced(timeEntry.id);
       } catch (e) {
-        print('Failed to sync time entry ${timeEntry.id}: $e');
+        Logger().e('Failed to sync time entry ${timeEntry.id}: $e');
       }
     }
   }
@@ -131,7 +132,7 @@ class SupabaseService {
         }).execute();
         await incomeRepository.markIncomeAsSynced(income.id);
       } catch (e) {
-        print('Failed to sync income ${income.id}: $e');
+        Logger().e('Failed to sync income ${income.id}: $e');
       }
     }
   }
