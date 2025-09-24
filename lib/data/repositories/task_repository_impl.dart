@@ -12,6 +12,16 @@ class TaskRepositoryImpl implements TaskRepository {
   TaskRepositoryImpl(this._tasksDao);
 
   @override
+  Stream<List<TaskEntity>> watchAllTasks() {
+    return _tasksDao.watchAllTasks().map(
+          (tasks) => tasks
+              .where((task) => !task.isDeleted)
+              .map((task) => task.toEntity())
+              .toList(),
+        );
+  }
+
+  @override
   Stream<List<TaskEntity>> watchTasksForProject(int projectId) {
     return _tasksDao.watchTasksForProject(projectId).map(
           (tasks) => tasks

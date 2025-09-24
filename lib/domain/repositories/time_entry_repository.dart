@@ -2,6 +2,7 @@ import '../../core/utils/result.dart';
 import '../../domain/entities/time_entry_entity.dart';
 
 abstract class TimeEntryRepository {
+  Stream<List<TimeEntryEntity>> watchAllTimeEntries();
   Stream<List<TimeEntryEntity>> watchTimeEntriesForTask(int taskId);
   Future<Result<TimeEntryEntity>> getTimeEntryById(int id);
   Future<Result<void>> createTimeEntry(TimeEntryEntity timeEntry);

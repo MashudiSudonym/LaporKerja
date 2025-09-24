@@ -36,6 +36,14 @@ class MockTimeEntryRepository extends _i1.Mock
   }
 
   @override
+  _i3.Stream<List<_i4.TimeEntryEntity>> watchAllTimeEntries() =>
+      (super.noSuchMethod(
+            Invocation.method(#watchAllTimeEntries, []),
+            returnValue: _i3.Stream<List<_i4.TimeEntryEntity>>.empty(),
+          )
+          as _i3.Stream<List<_i4.TimeEntryEntity>>);
+
+  @override
   _i3.Stream<List<_i4.TimeEntryEntity>> watchTimeEntriesForTask(int? taskId) =>
       (super.noSuchMethod(
             Invocation.method(#watchTimeEntriesForTask, [taskId]),

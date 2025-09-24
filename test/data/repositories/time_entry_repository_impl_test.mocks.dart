@@ -264,6 +264,14 @@ class MockTimeEntriesDao extends _i1.Mock implements _i6.TimeEntriesDao {
           as _i2.$TimeEntriesTable);
 
   @override
+  _i5.Stream<List<_i2.TimeEntry>> watchAllTimeEntries() =>
+      (super.noSuchMethod(
+            Invocation.method(#watchAllTimeEntries, []),
+            returnValue: _i5.Stream<List<_i2.TimeEntry>>.empty(),
+          )
+          as _i5.Stream<List<_i2.TimeEntry>>);
+
+  @override
   _i5.Stream<List<_i2.TimeEntry>> watchTimeEntriesForTask(int? taskId) =>
       (super.noSuchMethod(
             Invocation.method(#watchTimeEntriesForTask, [taskId]),

@@ -9,6 +9,10 @@ class TimeEntriesDao extends DatabaseAccessor<AppDatabase>
     with _$TimeEntriesDaoMixin {
   TimeEntriesDao(super.db);
 
+  Stream<List<TimeEntry>> watchAllTimeEntries() {
+    return select(timeEntries).watch();
+  }
+
   Stream<List<TimeEntry>> watchTimeEntriesForTask(int taskId) {
     return (select(
       timeEntries,

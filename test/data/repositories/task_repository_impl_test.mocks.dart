@@ -246,6 +246,14 @@ class MockTasksDao extends _i1.Mock implements _i6.TasksDao {
           as _i2.$TasksTable);
 
   @override
+  _i5.Stream<List<_i2.Task>> watchAllTasks() =>
+      (super.noSuchMethod(
+            Invocation.method(#watchAllTasks, []),
+            returnValue: _i5.Stream<List<_i2.Task>>.empty(),
+          )
+          as _i5.Stream<List<_i2.Task>>);
+
+  @override
   _i5.Stream<List<_i2.Task>> watchTasksForProject(int? projectId) =>
       (super.noSuchMethod(
             Invocation.method(#watchTasksForProject, [projectId]),

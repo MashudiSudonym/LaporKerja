@@ -34,6 +34,14 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
   }
 
   @override
+  _i3.Stream<List<_i4.TaskEntity>> watchAllTasks() =>
+      (super.noSuchMethod(
+            Invocation.method(#watchAllTasks, []),
+            returnValue: _i3.Stream<List<_i4.TaskEntity>>.empty(),
+          )
+          as _i3.Stream<List<_i4.TaskEntity>>);
+
+  @override
   _i3.Stream<List<_i4.TaskEntity>> watchTasksForProject(int? projectId) =>
       (super.noSuchMethod(
             Invocation.method(#watchTasksForProject, [projectId]),

@@ -12,6 +12,16 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   TimeEntryRepositoryImpl(this._timeEntriesDao);
 
   @override
+  Stream<List<TimeEntryEntity>> watchAllTimeEntries() {
+    return _timeEntriesDao.watchAllTimeEntries().map(
+          (timeEntries) => timeEntries
+              .where((timeEntry) => !timeEntry.isDeleted)
+              .map((timeEntry) => timeEntry.toEntity())
+              .toList(),
+        );
+  }
+
+  @override
   Stream<List<TimeEntryEntity>> watchTimeEntriesForTask(int taskId) {
     return _timeEntriesDao.watchTimeEntriesForTask(taskId).map(
           (timeEntries) => timeEntries

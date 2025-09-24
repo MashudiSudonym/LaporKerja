@@ -182,6 +182,27 @@ lapor_kerja/
 - **Formatting**: Ikuti output dartfmt, indentasi 2-spasi, batas 80 karakter per baris
 - **Documentation**: Gunakan `///` untuk public APIs, hindari komentar inline kecuali logika kompleks
 
+## Use Case Structure Guidelines
+
+- **Folder Structure**: Kelompokkan use cases berdasarkan entitas (misalnya `client/`, `project/`), kemudian berdasarkan aksi (misalnya `add_client/`, `update_client/`, `delete_client/`).
+- **Pemisahan File**: Pisahkan Params dan UseCase ke file berbeda (misalnya `add_client_params.dart` dan `add_client_usecase.dart`).
+- **Implementasi Interface**: Use case yang mengembalikan `Future<Result<...>>` harus mengimplementasikan `UseCase<R, P>` dengan class Params yang sesuai.
+- **Get Use Cases**: Use case untuk pengambilan data (misalnya `GetClientsUseCase`) tidak perlu Params dan bisa dalam satu file tanpa subfolder.
+- **Contoh Struktur**:
+  ```
+  lib/domain/usecases/client/
+  ├── add_client/
+  │   ├── add_client_params.dart
+  │   └── add_client_usecase.dart
+  ├── update_client/
+  │   ├── update_client_params.dart
+  │   └── update_client_usecase.dart
+  ├── delete_client/
+  │   ├── delete_client_params.dart
+  │   └── delete_client_usecase.dart
+  └── get_clients_usecase.dart
+  ```
+
 ## Contributing
 
 1. Fork repository

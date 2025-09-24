@@ -2,6 +2,7 @@ import '../../core/utils/result.dart';
 import '../../domain/entities/task_entity.dart';
 
 abstract class TaskRepository {
+  Stream<List<TaskEntity>> watchAllTasks();
   Stream<List<TaskEntity>> watchTasksForProject(int projectId);
   Future<Result<TaskEntity>> getTaskById(int id);
   Future<Result<void>> createTask(TaskEntity task);

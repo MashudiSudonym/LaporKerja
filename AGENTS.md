@@ -29,3 +29,23 @@
 - **Data Models**: Freezed for immutable classes
 - **Error Handling**: Result<T> for type-safe error handling in domain layer
 - **Architecture**: Offline-first (local-first, background sync)
+
+## Use Case Structure Guidelines
+- **Folder Structure**: Group use cases by entity (e.g., `client/`, `project/`), then by action (e.g., `add_client/`, `update_client/`, `delete_client/`).
+- **File Separation**: Separate Params and UseCase into different files (e.g., `add_client_params.dart` and `add_client_usecase.dart`).
+- **Interface Implementation**: Use cases returning `Future<Result<...>>` must implement `UseCase<R, P>` with appropriate Params class.
+- **Get Use Cases**: Use cases for fetching data (e.g., `GetClientsUseCase`) do not need Params and can be in a single file without subfolder.
+- **Example Structure**:
+  ```
+  lib/domain/usecases/client/
+  ├── add_client/
+  │   ├── add_client_params.dart
+  │   └── add_client_usecase.dart
+  ├── update_client/
+  │   ├── update_client_params.dart
+  │   └── update_client_usecase.dart
+  ├── delete_client/
+  │   ├── delete_client_params.dart
+  │   └── delete_client_usecase.dart
+  └── get_clients_usecase.dart
+  ```
