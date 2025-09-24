@@ -1,8 +1,8 @@
 # Agent Guidelines for lapor_kerja
 
 ## Commands
-- **Build**: `flutter build apk` (Android) or `flutter build ios` (iOS)
-- **Run**: `flutter run`
+- **Build**: `flutter build apk --flavor dev --target lib/main_dev.dart` (dev) or `flutter build apk --flavor prod --target lib/main_prod.dart` (prod)
+- **Run**: `flutter run --flavor dev --target lib/main_dev.dart` (dev) or `flutter run --flavor prod --target lib/main_prod.dart` (prod)
 - **Test all**: `flutter test`
 - **Test single**: `flutter test test/widget_test.dart` or `flutter test --plain-name "Counter increments"`
 - **Lint**: `flutter analyze`

@@ -8,41 +8,41 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
-   flutter:
-     sdk: flutter
+  flutter:
+    sdk: flutter
 
-   # Existing dependencies
-   cupertino_icons: ^1.0.8
-   flutter_riverpod: ^3.0.0
-   riverpod_annotation: ^3.0.0
-   freezed_annotation: ^3.1.0
-   json_annotation: ^4.9.0
+  # Existing dependencies
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^3.0.0
+  riverpod_annotation: ^3.0.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
 
-   # Database & Storage - Offline-first local database (switched to Drift)
-   drift: ^2.15.0
-   sqlite3_flutter_libs: ^0.5.18
+  # Database & Storage - Offline-first local database (switched to Drift)
+  drift: ^2.15.0
+  sqlite3_flutter_libs: ^0.5.18
 
-   # Remote Sync - Supabase integration for cloud sync
-   supabase_flutter: ^0.2.9
+  # Remote Sync - Supabase integration for cloud sync
+  supabase_flutter: ^2.7.0
 
-   # Background Tasks - Offline sync and network detection
-   workmanager: ^0.5.1
-   connectivity_plus: ^5.0.2
+  # Background Tasks - Offline sync and network detection
+  workmanager: ^0.9.0
+  connectivity_plus: ^5.0.2
 
-   # Utilities - ID generation and date/time formatting
-   uuid: ^4.1.0
-   intl: ^0.18.1
-   path: ^1.9.0
-   path_provider: ^2.1.3
-   permission_handler: ^11.3.1
+  # Utilities - ID generation and date/time formatting
+  uuid: ^4.1.0
+  intl: ^0.18.1
+  path: ^1.9.0
+  path_provider: ^2.1.3
+  permission_handler: ^11.3.1
 
-   # Routing
-   go_router: ^16.2.1
+  # Routing
+  go_router: ^16.2.1
 
-   # Optional/Advanced - Additional background services (removed Hive as redundant)
-   flutter_background_service: ^1.0.1
-   flutter_dotenv: ^6.0.0
-   logger: ^2.6.1
+  # Optional/Advanced - Additional background services (removed Hive as redundant)
+  flutter_background_service: ^5.1.0
+  flutter_dotenv: ^6.0.0
+  logger: ^2.6.1
 
 dev_dependencies:
   flutter_test:

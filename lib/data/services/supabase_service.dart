@@ -14,7 +14,7 @@ class SupabaseService {
   /// Generic upsert method for any table
   Future<void> upsert<T>(String table, Map<String, dynamic> data) async {
     try {
-      await _supabase.from(table).upsert(data).execute();
+      await _supabase.from(table).upsert(data);
     } catch (e) {
       Constants.logger.e('Failed to upsert to $table: $e');
       throw Exception('Failed to sync to $table: $e');
