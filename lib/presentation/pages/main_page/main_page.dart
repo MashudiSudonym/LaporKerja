@@ -8,7 +8,7 @@ import '../projects/project_list_page.dart';
 import '../tasks/task_list_page.dart';
 import '../time_entries/time_entry_list_page.dart';
 
-/// Main page with NavigationRail for entity navigation
+/// Main page with modern monochrome BottomNavigationBar
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
@@ -39,65 +39,78 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_selectedIndex]),
+        title: Text(
+          _titles[_selectedIndex],
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.sync),
+            icon: const Icon(Icons.sync, color: Colors.black),
             onPressed: () async {
               try {
                 await ref.read(syncProvider.notifier).syncAll();
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Sync completed successfully')),
-                  );
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Sync completed successfully'),
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  });
                 }
               } catch (e) {
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Sync failed: $e')),
-                  );
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Sync failed: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  });
                 }
               }
             },
           ),
         ],
       ),
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            labelType: NavigationRailLabelType.all,
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.folder),
-                label: Text('Projects'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text('Clients'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.task),
-                label: Text('Tasks'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.timer),
-                label: Text('Time'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.attach_money),
-                label: Text('Income'),
-              ),
-            ],
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.folder),
+            label: 'Projects',
           ),
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: _pages[_selectedIndex],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Clients',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.task),
+            label: 'Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer),
+            label: 'Time',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.attach_money),
+            label: 'Income',
           ),
         ],
       ),
