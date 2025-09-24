@@ -4,11 +4,12 @@
 - **Total Lines**: 127
 - **Covered Lines**: 127
 - **Coverage Percentage**: 100%
-- **Total Tests**: 67
+- **Total Tests**: 87
 
 ## Test Breakdown
 - **Entity Tests**: 20 tests (5 entities × 4 tests each: creation, JSON serialization/deserialization, equality, copyWith)
 - **Repository Tests**: 36 tests (5 repositories × 7-8 tests each: watching, CRUD operations, sync operations)
+- **Data Mappers Tests**: 20 tests (5 mappers × 4 tests each: toEntity and toCompanion conversions)
 - **Core Utils Tests**: 11 tests (Result class, UseCase, Constants)
 
 ## Detailed Coverage by File
@@ -33,6 +34,14 @@
 - `lib/domain/repositories/task_repository.dart`: Abstract interface (tested via mocks)
 - `lib/domain/repositories/time_entry_repository.dart`: Abstract interface (tested via mocks)
 
+### Data Layer
+#### Mappers
+- `lib/data/mappers/client_mapper.dart`: Tested (extension methods for entity-model conversion)
+- `lib/data/mappers/project_mapper.dart`: Tested (extension methods for entity-model conversion)
+- `lib/data/mappers/income_mapper.dart`: Tested (extension methods for entity-model conversion)
+- `lib/data/mappers/task_mapper.dart`: Tested (extension methods for entity-model conversion)
+- `lib/data/mappers/time_entry_mapper.dart`: Tested (extension methods for entity-model conversion)
+
 ### Core Layer
 - `lib/core/constants/constants.dart`: 100% (3/3 lines)
 - `lib/core/utils/result.dart`: 100% (7/7 lines)
@@ -52,6 +61,12 @@
 - Sync-related operations (get unsynced, mark as synced)
 - Method signature validation via mocks
 
+### Data Mappers Tests
+- Entity to model conversion (toEntity)
+- Model to entity conversion (toCompanion)
+- Handling of nullable fields and default values
+- Special handling for id == 0 (Value.absent)
+
 ### Core Utils Tests
 - Result class (Success/Failed variants)
 - UseCase interface implementation
@@ -62,6 +77,7 @@
 - Abstract interfaces are tested through mock implementations
 - Generated code from Freezed is included in coverage
 - Repository interfaces now use Result<T> for error handling in Future methods
+- Data layer mappers (entity-model conversion) are implemented and tested
 - Data layer (Drift models/DAOs) and presentation layer are not yet tested
 - Bootstrap and main application files are not tested
 - HTML coverage report available in `coverage/html/index.html`
