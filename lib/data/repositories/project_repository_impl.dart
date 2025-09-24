@@ -3,13 +3,15 @@ import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/projects_dao.dart';
 import 'package:lapor_kerja/data/mappers/project_mapper.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/project_entity.dart';
 import 'package:lapor_kerja/domain/repositories/project_repository.dart';
 
 class ProjectRepositoryImpl implements ProjectRepository {
   final ProjectsDao _projectsDao;
+  final SupabaseService _supabaseService;
 
-  ProjectRepositoryImpl(this._projectsDao);
+  ProjectRepositoryImpl(this._projectsDao, this._supabaseService);
 
   @override
   Stream<List<ProjectEntity>> watchAllProjects() {
@@ -44,6 +46,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
   Future<Result<void>> createProject(ProjectEntity project) async {
     try {
       await _projectsDao.upsertProject(project.toCompanion());
+      // Try to sync in background
+      _supabaseService.syncProjects(this);
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create project: $e');

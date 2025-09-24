@@ -3,13 +3,15 @@ import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/time_entries_dao.dart';
 import 'package:lapor_kerja/data/mappers/time_entry_mapper.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/time_entry_entity.dart';
 import 'package:lapor_kerja/domain/repositories/time_entry_repository.dart';
 
 class TimeEntryRepositoryImpl implements TimeEntryRepository {
   final TimeEntriesDao _timeEntriesDao;
+  final SupabaseService _supabaseService;
 
-  TimeEntryRepositoryImpl(this._timeEntriesDao);
+  TimeEntryRepositoryImpl(this._timeEntriesDao, this._supabaseService);
 
   @override
   Stream<List<TimeEntryEntity>> watchAllTimeEntries() {
@@ -51,6 +53,8 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   Future<Result<void>> createTimeEntry(TimeEntryEntity timeEntry) async {
     try {
       await _timeEntriesDao.upsertTimeEntry(timeEntry.toCompanion());
+      // Try to sync in background
+      _supabaseService.syncTimeEntries(this);
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create time entry: $e');

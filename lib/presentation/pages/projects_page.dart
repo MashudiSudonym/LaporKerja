@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/project_entity.dart';
 import '../../domain/usecases/project/add_project/add_project_params.dart';
+import '../providers/sync_provider.dart';
 import '../providers/ui/projects_provider.dart';
 
 class ProjectsPage extends ConsumerWidget {
@@ -15,6 +16,17 @@ class ProjectsPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Projects'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sync),
+            onPressed: () async {
+              await ref.read(syncProvider.notifier).syncAll();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Sync completed')),
+              );
+            },
+          ),
+        ],
       ),
       body: projectsAsync.when(
         data: (projects) => ListView.builder(
@@ -22,7 +34,7 @@ class ProjectsPage extends ConsumerWidget {
           itemBuilder: (context, index) {
             final project = projects[index];
             return ListTile(
-              title: Text(project.projectName ?? 'No name'),
+              title: Text(project.projectName),
               subtitle: Text(project.description ?? ''),
             );
           },

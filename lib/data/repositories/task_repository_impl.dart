@@ -3,13 +3,15 @@ import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/tasks_dao.dart';
 import 'package:lapor_kerja/data/mappers/task_mapper.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/task_entity.dart';
 import 'package:lapor_kerja/domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   final TasksDao _tasksDao;
+  final SupabaseService _supabaseService;
 
-  TaskRepositoryImpl(this._tasksDao);
+  TaskRepositoryImpl(this._tasksDao, this._supabaseService);
 
   @override
   Stream<List<TaskEntity>> watchAllTasks() {
@@ -51,6 +53,8 @@ class TaskRepositoryImpl implements TaskRepository {
   Future<Result<void>> createTask(TaskEntity task) async {
     try {
       await _tasksDao.upsertTask(task.toCompanion());
+      // Try to sync in background
+      _supabaseService.syncTasks(this);
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create task: $e');

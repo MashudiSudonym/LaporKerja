@@ -3,13 +3,15 @@ import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
 import 'package:lapor_kerja/data/datasources/local/dao/clients_dao.dart';
 import 'package:lapor_kerja/data/mappers/client_mapper.dart';
+import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/client_entity.dart';
 import 'package:lapor_kerja/domain/repositories/client_repository.dart';
 
 class ClientRepositoryImpl implements ClientRepository {
   final ClientsDao _clientsDao;
+  final SupabaseService _supabaseService;
 
-  ClientRepositoryImpl(this._clientsDao);
+  ClientRepositoryImpl(this._clientsDao, this._supabaseService);
 
   @override
   Stream<List<ClientEntity>> watchAllClients() {
@@ -43,6 +45,8 @@ class ClientRepositoryImpl implements ClientRepository {
   Future<Result<void>> createClient(ClientEntity client) async {
     try {
       await _clientsDao.upsertClient(client.toCompanion());
+      // Try to sync in background
+      _supabaseService.syncClients(this);
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create client: $e');
