@@ -1,138 +1,77 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:logger/logger.dart';
 
-import '../../domain/repositories/client_repository.dart';
-import '../../domain/repositories/income_repository.dart';
-import '../../domain/repositories/project_repository.dart';
-import '../../domain/repositories/task_repository.dart';
-import '../../domain/repositories/time_entry_repository.dart';
+import '../../core/constants/constants.dart';
+
+import '../../domain/entities/client_entity.dart';
+import '../../domain/entities/income_entity.dart';
+import '../../domain/entities/project_entity.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../domain/entities/time_entry_entity.dart';
 
 class SupabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<bool> _isOnline() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
+  /// Generic upsert method for any table
+  Future<void> upsert<T>(String table, Map<String, dynamic> data) async {
+    try {
+      await _supabase.from(table).upsert(data).execute();
+    } catch (e) {
+      Constants.logger.e('Failed to upsert to $table: $e');
+      throw Exception('Failed to sync to $table: $e');
+    }
   }
 
-  Future<void> syncProjects(ProjectRepository projectRepository) async {
-    if (!await _isOnline()) return;
-
-    final unsyncedProjects = await projectRepository.getUnsyncedProjects();
-    for (final project in unsyncedProjects.resultValue ?? []) {
+  /// Sync projects to Supabase
+  Future<void> syncProjects(List<ProjectEntity> projects) async {
+    for (final project in projects) {
       try {
-        await _supabase.from('projects').upsert({
-          'id': project.id,
-          'project_name': project.projectName,
-          'description': project.description,
-          'client_id': project.clientId,
-          'start_date': project.startDate?.toIso8601String(),
-          'deadline': project.deadline?.toIso8601String(),
-          'status': project.status,
-          'created_at': project.createdAt.toIso8601String(),
-          'updated_at': project.updatedAt.toIso8601String(),
-          'is_deleted': project.isDeleted,
-        }).execute();
-        await projectRepository.markProjectAsSynced(project.id);
+        await upsert('projects', project.toJson());
       } catch (e) {
-        // Handle error, maybe log or queue
-        Logger().e('Failed to sync project ${project.id}: $e');
+        Constants.logger.e('Failed to sync project ${project.id}: $e');
       }
     }
   }
 
-  Future<void> syncClients(ClientRepository clientRepository) async {
-    if (!await _isOnline()) return;
-
-    final unsyncedClients = await clientRepository.getUnsyncedClients();
-    for (final client in unsyncedClients.resultValue ?? []) {
+  /// Sync clients to Supabase
+  Future<void> syncClients(List<ClientEntity> clients) async {
+    for (final client in clients) {
       try {
-        await _supabase.from('clients').upsert({
-          'id': client.id,
-          'name': client.name,
-          'email': client.email,
-          'phone': client.phone,
-          'address': client.address,
-          'created_at': client.createdAt.toIso8601String(),
-          'updated_at': client.updatedAt.toIso8601String(),
-          'is_deleted': client.isDeleted,
-        }).execute();
-        await clientRepository.markClientAsSynced(client.id);
+        await upsert('clients', client.toJson());
       } catch (e) {
-        Logger().e('Failed to sync client ${client.id}: $e');
+        Constants.logger.e('Failed to sync client ${client.id}: $e');
       }
     }
   }
 
-  Future<void> syncTasks(TaskRepository taskRepository) async {
-    if (!await _isOnline()) return;
-
-    final unsyncedTasks = await taskRepository.getUnsyncedTasks();
-    for (final task in unsyncedTasks.resultValue ?? []) {
+  /// Sync tasks to Supabase
+  Future<void> syncTasks(List<TaskEntity> tasks) async {
+    for (final task in tasks) {
       try {
-        await _supabase.from('tasks').upsert({
-          'id': task.id,
-          'project_id': task.projectId,
-          'title': task.title,
-          'description': task.description,
-          'status': task.status,
-          'priority': task.priority,
-          'due_date': task.dueDate?.toIso8601String(),
-          'created_at': task.createdAt.toIso8601String(),
-          'updated_at': task.updatedAt.toIso8601String(),
-          'is_deleted': task.isDeleted,
-        }).execute();
-        await taskRepository.markTaskAsSynced(task.id);
+        await upsert('tasks', task.toJson());
       } catch (e) {
-        Logger().e('Failed to sync task ${task.id}: $e');
+        Constants.logger.e('Failed to sync task ${task.id}: $e');
       }
     }
   }
 
-  Future<void> syncTimeEntries(TimeEntryRepository timeEntryRepository) async {
-    if (!await _isOnline()) return;
-
-    final unsyncedTimeEntries = await timeEntryRepository.getUnsyncedTimeEntries();
-    for (final timeEntry in unsyncedTimeEntries.resultValue ?? []) {
+  /// Sync time entries to Supabase
+  Future<void> syncTimeEntries(List<TimeEntryEntity> timeEntries) async {
+    for (final timeEntry in timeEntries) {
       try {
-        await _supabase.from('time_entries').upsert({
-          'id': timeEntry.id,
-          'task_id': timeEntry.taskId,
-          'start_time': timeEntry.startTime.toIso8601String(),
-          'end_time': timeEntry.endTime?.toIso8601String(),
-          'duration': timeEntry.duration,
-          'description': timeEntry.description,
-          'created_at': timeEntry.createdAt.toIso8601String(),
-          'updated_at': timeEntry.updatedAt.toIso8601String(),
-          'is_deleted': timeEntry.isDeleted,
-        }).execute();
-        await timeEntryRepository.markTimeEntryAsSynced(timeEntry.id);
+        await upsert('time_entries', timeEntry.toJson());
       } catch (e) {
-        Logger().e('Failed to sync time entry ${timeEntry.id}: $e');
+        Constants.logger.e('Failed to sync time entry ${timeEntry.id}: $e');
       }
     }
   }
 
-  Future<void> syncIncomes(IncomeRepository incomeRepository) async {
-    if (!await _isOnline()) return;
-
-    final unsyncedIncomes = await incomeRepository.getUnsyncedIncomes();
-    for (final income in unsyncedIncomes.resultValue ?? []) {
+  /// Sync incomes to Supabase
+  Future<void> syncIncomes(List<IncomeEntity> incomes) async {
+    for (final income in incomes) {
       try {
-        await _supabase.from('incomes').upsert({
-          'id': income.id,
-          'amount': income.amount,
-          'description': income.description,
-          'date': income.date.toIso8601String(),
-          'category': income.category,
-          'created_at': income.createdAt.toIso8601String(),
-          'updated_at': income.updatedAt.toIso8601String(),
-          'is_deleted': income.isDeleted,
-        }).execute();
-        await incomeRepository.markIncomeAsSynced(income.id);
+        await upsert('incomes', income.toJson());
       } catch (e) {
-        Logger().e('Failed to sync income ${income.id}: $e');
+        Constants.logger.e('Failed to sync income ${income.id}: $e');
       }
     }
   }

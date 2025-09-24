@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lapor_kerja/data/repositories/task_repository_impl.dart';
@@ -10,5 +11,6 @@ part 'task_repository_provider.g.dart';
 TaskRepositoryImpl taskRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   final supabaseService = ref.watch(supabaseServiceProvider);
-  return TaskRepositoryImpl(db.tasksDao, supabaseService);
+  final connectivity = Connectivity();
+  return TaskRepositoryImpl(db.tasksDao, supabaseService, connectivity);
 }

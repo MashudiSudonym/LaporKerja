@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,7 +9,7 @@ import 'package:lapor_kerja/data/repositories/time_entry_repository_impl.dart';
 import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/time_entry_entity.dart';
 
-@GenerateMocks([TimeEntriesDao, SupabaseService])
+@GenerateMocks([TimeEntriesDao, SupabaseService, Connectivity])
 import 'time_entry_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -32,12 +33,14 @@ extension TimeEntriesCompanionTestHelper on TimeEntriesCompanion {
 void main() {
   late MockTimeEntriesDao mockTimeEntriesDao;
   late MockSupabaseService mockSupabaseService;
+  late MockConnectivity mockConnectivity;
   late TimeEntryRepositoryImpl repository;
 
   setUp(() {
     mockTimeEntriesDao = MockTimeEntriesDao();
     mockSupabaseService = MockSupabaseService();
-    repository = TimeEntryRepositoryImpl(mockTimeEntriesDao, mockSupabaseService);
+    mockConnectivity = MockConnectivity();
+    repository = TimeEntryRepositoryImpl(mockTimeEntriesDao, mockSupabaseService, mockConnectivity);
   });
 
   group('TimeEntryRepositoryImpl', () {
@@ -54,6 +57,7 @@ void main() {
 
     test('should create time entry successfully', () async {
       when(mockTimeEntriesDao.upsertTimeEntry(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.createTimeEntry(testTimeEntry);
 
@@ -83,6 +87,7 @@ void main() {
 
     test('should update time entry successfully', () async {
       when(mockTimeEntriesDao.upsertTimeEntry(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.updateTimeEntry(testTimeEntry);
 
@@ -91,12 +96,16 @@ void main() {
     });
 
     test('should soft delete time entry successfully', () async {
-      when(mockTimeEntriesDao.softDeleteTimeEntry(1)).thenAnswer((_) async => 1);
+      // Mock getTimeEntryById to return the time entry
+      when(mockTimeEntriesDao.watchTimeEntriesForTask(any))
+          .thenAnswer((_) => Stream.value([testTimeEntry.toCompanion().toTimeEntry()]));
+      when(mockTimeEntriesDao.upsertTimeEntry(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.softDeleteTimeEntry(1);
 
       expect(result.isSuccess, true);
-      verify(mockTimeEntriesDao.softDeleteTimeEntry(1)).called(1);
+      verify(mockTimeEntriesDao.upsertTimeEntry(any)).called(1);
     });
 
     test('should watch time entries for task and filter out deleted ones', () async {

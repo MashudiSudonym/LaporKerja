@@ -5,18 +5,20 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
 
+import 'package:connectivity_plus/connectivity_plus.dart' as _i14;
+import 'package:connectivity_plus_platform_interface/connectivity_plus_platform_interface.dart'
+    as _i15;
 import 'package:drift/drift.dart' as _i3;
 import 'package:drift/src/runtime/executor/stream_queries.dart' as _i4;
 import 'package:lapor_kerja/data/datasources/local/app_database.dart' as _i2;
 import 'package:lapor_kerja/data/datasources/local/dao/time_entries_dao.dart'
     as _i6;
 import 'package:lapor_kerja/data/services/supabase_service.dart' as _i8;
-import 'package:lapor_kerja/domain/repositories/client_repository.dart' as _i10;
-import 'package:lapor_kerja/domain/repositories/income_repository.dart' as _i13;
-import 'package:lapor_kerja/domain/repositories/project_repository.dart' as _i9;
-import 'package:lapor_kerja/domain/repositories/task_repository.dart' as _i11;
-import 'package:lapor_kerja/domain/repositories/time_entry_repository.dart'
-    as _i12;
+import 'package:lapor_kerja/domain/entities/client_entity.dart' as _i10;
+import 'package:lapor_kerja/domain/entities/income_entity.dart' as _i13;
+import 'package:lapor_kerja/domain/entities/project_entity.dart' as _i9;
+import 'package:lapor_kerja/domain/entities/task_entity.dart' as _i11;
+import 'package:lapor_kerja/domain/entities/time_entry_entity.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i7;
 
@@ -742,49 +744,83 @@ class MockSupabaseService extends _i1.Mock implements _i8.SupabaseService {
   }
 
   @override
-  _i5.Future<void> syncProjects(_i9.ProjectRepository? projectRepository) =>
+  _i5.Future<void> upsert<T>(String? table, Map<String, dynamic>? data) =>
       (super.noSuchMethod(
-            Invocation.method(#syncProjects, [projectRepository]),
+            Invocation.method(#upsert, [table, data]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
 
   @override
-  _i5.Future<void> syncClients(_i10.ClientRepository? clientRepository) =>
+  _i5.Future<void> syncProjects(List<_i9.ProjectEntity>? projects) =>
       (super.noSuchMethod(
-            Invocation.method(#syncClients, [clientRepository]),
+            Invocation.method(#syncProjects, [projects]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
 
   @override
-  _i5.Future<void> syncTasks(_i11.TaskRepository? taskRepository) =>
+  _i5.Future<void> syncClients(List<_i10.ClientEntity>? clients) =>
       (super.noSuchMethod(
-            Invocation.method(#syncTasks, [taskRepository]),
+            Invocation.method(#syncClients, [clients]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
 
   @override
-  _i5.Future<void> syncTimeEntries(
-    _i12.TimeEntryRepository? timeEntryRepository,
-  ) =>
+  _i5.Future<void> syncTasks(List<_i11.TaskEntity>? tasks) =>
       (super.noSuchMethod(
-            Invocation.method(#syncTimeEntries, [timeEntryRepository]),
+            Invocation.method(#syncTasks, [tasks]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
 
   @override
-  _i5.Future<void> syncIncomes(_i13.IncomeRepository? incomeRepository) =>
+  _i5.Future<void> syncTimeEntries(List<_i12.TimeEntryEntity>? timeEntries) =>
       (super.noSuchMethod(
-            Invocation.method(#syncIncomes, [incomeRepository]),
+            Invocation.method(#syncTimeEntries, [timeEntries]),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> syncIncomes(List<_i13.IncomeEntity>? incomes) =>
+      (super.noSuchMethod(
+            Invocation.method(#syncIncomes, [incomes]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+}
+
+/// A class which mocks [Connectivity].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockConnectivity extends _i1.Mock implements _i14.Connectivity {
+  MockConnectivity() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Stream<_i15.ConnectivityResult> get onConnectivityChanged =>
+      (super.noSuchMethod(
+            Invocation.getter(#onConnectivityChanged),
+            returnValue: _i5.Stream<_i15.ConnectivityResult>.empty(),
+          )
+          as _i5.Stream<_i15.ConnectivityResult>);
+
+  @override
+  _i5.Future<_i15.ConnectivityResult> checkConnectivity() =>
+      (super.noSuchMethod(
+            Invocation.method(#checkConnectivity, []),
+            returnValue: _i5.Future<_i15.ConnectivityResult>.value(
+              _i15.ConnectivityResult.bluetooth,
+            ),
+          )
+          as _i5.Future<_i15.ConnectivityResult>);
 }

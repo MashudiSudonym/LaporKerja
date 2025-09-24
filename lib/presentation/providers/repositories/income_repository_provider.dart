@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lapor_kerja/data/repositories/income_repository_impl.dart';
@@ -10,5 +11,6 @@ part 'income_repository_provider.g.dart';
 IncomeRepositoryImpl incomeRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   final supabaseService = ref.watch(supabaseServiceProvider);
-  return IncomeRepositoryImpl(db.incomesDao, supabaseService);
+  final connectivity = Connectivity();
+  return IncomeRepositoryImpl(db.incomesDao, supabaseService, connectivity);
 }

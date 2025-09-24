@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -6,18 +7,20 @@ import 'package:lapor_kerja/data/repositories/project_repository_impl.dart';
 import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/project_entity.dart';
 
-@GenerateMocks([ProjectsDao, SupabaseService])
+@GenerateMocks([ProjectsDao, SupabaseService, Connectivity])
 import 'project_repository_impl_test.mocks.dart';
 
 void main() {
   late MockProjectsDao mockProjectsDao;
   late MockSupabaseService mockSupabaseService;
+  late MockConnectivity mockConnectivity;
   late ProjectRepositoryImpl repository;
 
   setUp(() {
     mockProjectsDao = MockProjectsDao();
     mockSupabaseService = MockSupabaseService();
-    repository = ProjectRepositoryImpl(mockProjectsDao, mockSupabaseService);
+    mockConnectivity = MockConnectivity();
+    repository = ProjectRepositoryImpl(mockProjectsDao, mockSupabaseService, mockConnectivity);
   });
 
   group('ProjectRepositoryImpl', () {
@@ -36,6 +39,7 @@ void main() {
 
     test('should create project successfully', () async {
       when(mockProjectsDao.upsertProject(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.createProject(testProject);
 
@@ -68,6 +72,7 @@ void main() {
 
     test('should update project successfully', () async {
       when(mockProjectsDao.upsertProject(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.updateProject(testProject);
 
@@ -76,12 +81,19 @@ void main() {
     });
 
     test('should soft delete project successfully', () async {
-      when(mockProjectsDao.softDeleteProject(1)).thenAnswer((_) async => 1);
+      // Mock getProjectById to return the project
+      when(mockProjectsDao.watchAllProjectsWithClient())
+          .thenAnswer((_) => Stream.value([
+                // Mock the project with client data
+                // This is simplified; in real test, you'd mock the full structure
+              ]));
+      when(mockProjectsDao.upsertProject(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.softDeleteProject(1);
 
       expect(result.isSuccess, true);
-      verify(mockProjectsDao.softDeleteProject(1)).called(1);
+      verify(mockProjectsDao.upsertProject(any)).called(1);
     });
 
     test('should watch all projects', () async {

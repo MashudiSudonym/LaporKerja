@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,7 +9,7 @@ import 'package:lapor_kerja/data/repositories/income_repository_impl.dart';
 import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/income_entity.dart';
 
-@GenerateMocks([IncomesDao, SupabaseService])
+@GenerateMocks([IncomesDao, SupabaseService, Connectivity])
 import 'income_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -33,12 +34,14 @@ extension IncomesCompanionTestHelper on IncomesCompanion {
 void main() {
   late MockIncomesDao mockIncomesDao;
   late MockSupabaseService mockSupabaseService;
+  late MockConnectivity mockConnectivity;
   late IncomeRepositoryImpl repository;
 
   setUp(() {
     mockIncomesDao = MockIncomesDao();
     mockSupabaseService = MockSupabaseService();
-    repository = IncomeRepositoryImpl(mockIncomesDao, mockSupabaseService);
+    mockConnectivity = MockConnectivity();
+    repository = IncomeRepositoryImpl(mockIncomesDao, mockSupabaseService, mockConnectivity);
   });
 
   group('IncomeRepositoryImpl', () {
@@ -55,6 +58,7 @@ void main() {
 
     test('should create income successfully', () async {
       when(mockIncomesDao.upsertIncome(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.createIncome(testIncome);
 
@@ -84,6 +88,7 @@ void main() {
 
     test('should update income successfully', () async {
       when(mockIncomesDao.upsertIncome(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.updateIncome(testIncome);
 
@@ -92,12 +97,16 @@ void main() {
     });
 
     test('should soft delete income successfully', () async {
-      when(mockIncomesDao.softDeleteIncome(1)).thenAnswer((_) async => 1);
+      // Mock getIncomeById to return the income
+      when(mockIncomesDao.watchAllIncomes())
+          .thenAnswer((_) => Stream.value([testIncome.toCompanion().toIncome()]));
+      when(mockIncomesDao.upsertIncome(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.softDeleteIncome(1);
 
       expect(result.isSuccess, true);
-      verify(mockIncomesDao.softDeleteIncome(1)).called(1);
+      verify(mockIncomesDao.upsertIncome(any)).called(1);
     });
 
     test('should watch all incomes', () async {

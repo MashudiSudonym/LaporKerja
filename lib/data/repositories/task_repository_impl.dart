@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:drift/drift.dart';
 import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
@@ -7,11 +8,14 @@ import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/task_entity.dart';
 import 'package:lapor_kerja/domain/repositories/task_repository.dart';
 
+import '../../core/constants/constants.dart';
+
 class TaskRepositoryImpl implements TaskRepository {
   final TasksDao _tasksDao;
   final SupabaseService _supabaseService;
+  final Connectivity _connectivity;
 
-  TaskRepositoryImpl(this._tasksDao, this._supabaseService);
+  TaskRepositoryImpl(this._tasksDao, this._supabaseService, this._connectivity);
 
   @override
   Stream<List<TaskEntity>> watchAllTasks() {
@@ -52,9 +56,23 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<Result<void>> createTask(TaskEntity task) async {
     try {
-      await _tasksDao.upsertTask(task.toCompanion());
-      // Try to sync in background
-      _supabaseService.syncTasks(this);
+      // Save locally first
+      final companion = task.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _tasksDao.upsertTask(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('tasks', task.toJson());
+          await markTaskAsSynced(task.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync task on create: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create task: $e');
@@ -64,7 +82,23 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<Result<void>> updateTask(TaskEntity task) async {
     try {
-      await _tasksDao.upsertTask(task.toCompanion());
+      // Save locally first
+      final companion = task.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _tasksDao.upsertTask(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('tasks', task.toJson());
+          await markTaskAsSynced(task.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync task on update: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to update task: $e');
@@ -74,7 +108,30 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<Result<void>> softDeleteTask(int id) async {
     try {
-      await _tasksDao.softDeleteTask(id);
+      // Get task before deleting
+      final taskResult = await getTaskById(id);
+      if (taskResult.isFailed) return taskResult;
+
+      final task = taskResult.resultValue!;
+      final updatedTask = task.copyWith(isDeleted: true);
+
+      // Save locally first
+      final companion = updatedTask.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _tasksDao.upsertTask(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('tasks', updatedTask.toJson());
+          await markTaskAsSynced(id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync task on delete: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to delete task: $e');
@@ -105,6 +162,20 @@ class TaskRepositoryImpl implements TaskRepository {
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to mark task as synced: $e');
+    }
+  }
+
+  /// Sync all unsynced tasks to Supabase
+  Future<void> syncAllTasks() async {
+    final unsyncedResult = await getUnsyncedTasks();
+    if (unsyncedResult.isFailed) return;
+
+    final unsyncedTasks = unsyncedResult.resultValue!;
+    await _supabaseService.syncTasks(unsyncedTasks);
+
+    // Mark all as synced
+    for (final task in unsyncedTasks) {
+      await markTaskAsSynced(task.id);
     }
   }
 }

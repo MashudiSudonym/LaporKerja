@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,7 +9,7 @@ import 'package:lapor_kerja/data/repositories/client_repository_impl.dart';
 import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/client_entity.dart';
 
-@GenerateMocks([ClientsDao, SupabaseService])
+@GenerateMocks([ClientsDao, SupabaseService, Connectivity])
 import 'client_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -31,12 +32,14 @@ extension ClientsCompanionTestHelper on ClientsCompanion {
 void main() {
   late MockClientsDao mockClientsDao;
   late MockSupabaseService mockSupabaseService;
+  late MockConnectivity mockConnectivity;
   late ClientRepositoryImpl repository;
 
   setUp(() {
     mockClientsDao = MockClientsDao();
     mockSupabaseService = MockSupabaseService();
-    repository = ClientRepositoryImpl(mockClientsDao, mockSupabaseService);
+    mockConnectivity = MockConnectivity();
+    repository = ClientRepositoryImpl(mockClientsDao, mockSupabaseService, mockConnectivity);
   });
 
   group('ClientRepositoryImpl', () {
@@ -51,6 +54,7 @@ void main() {
 
     test('should create client successfully', () async {
       when(mockClientsDao.upsertClient(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.createClient(testClient);
 
@@ -81,6 +85,7 @@ void main() {
 
     test('should update client successfully', () async {
       when(mockClientsDao.upsertClient(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.updateClient(testClient);
 
@@ -89,12 +94,16 @@ void main() {
     });
 
     test('should soft delete client successfully', () async {
-      when(mockClientsDao.softDeleteClient(1)).thenAnswer((_) async => 1);
+      // Mock getClientById to return the client
+      when(mockClientsDao.watchAllClients())
+          .thenAnswer((_) => Stream.value([testClient.toCompanion().toClient()]));
+      when(mockClientsDao.upsertClient(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.softDeleteClient(1);
 
       expect(result.isSuccess, true);
-      verify(mockClientsDao.softDeleteClient(1)).called(1);
+      verify(mockClientsDao.upsertClient(any)).called(1);
     });
 
     test('should watch all clients and filter out deleted ones', () async {

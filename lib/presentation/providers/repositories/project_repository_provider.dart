@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lapor_kerja/data/repositories/project_repository_impl.dart';
@@ -10,5 +11,6 @@ part 'project_repository_provider.g.dart';
 ProjectRepositoryImpl projectRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   final supabaseService = ref.watch(supabaseServiceProvider);
-  return ProjectRepositoryImpl(db.projectsDao, supabaseService);
+  final connectivity = Connectivity();
+  return ProjectRepositoryImpl(db.projectsDao, supabaseService, connectivity);
 }

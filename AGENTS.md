@@ -21,6 +21,36 @@
 - **Formatting**: Follow dartfmt output, 2-space indentation, 80-char line limit
 - **Documentation**: Use `///` for public APIs, avoid inline comments unless complex logic
 
+## Bootstrap Initialization
+
+File `lib/bootstrap.dart` handles all app initialization before `runApp()`. Tasks performed:
+
+### 1. **WidgetsFlutterBinding.ensureInitialized()**
+   - Initialize Flutter binding for platform access before runApp
+
+### 2. **Request Permissions**
+   - `Permission.notification.request()` - for background sync notifications
+   - `Permission.ignoreBatteryOptimizations.request()` - for background tasks
+
+### 3. **Load Environment Variables**
+   - Load `.env` based on flavor:
+     - DEV: `assets/dev/.env`
+     - PROD: `assets/prod/.env`
+   - Using `dotenv.load(fileName: ...)`
+
+### 4. **Initialize Supabase**
+   - `Supabase.initialize()` with:
+     - `url`: `dotenv.env['SUPABASE_URL']!`
+     - `anonKey`: `dotenv.env['SUPABASE_ANON_KEY']!`
+
+### 5. **Run App**
+   - `runApp(ProviderScope(observers: [MyObserver()], child: await builder()))`
+
+### Important Rules:
+- **All initializations requiring platform access or early configuration MUST be done in bootstrap.dart**
+- **Do NOT initialize in service classes or providers** - use `Supabase.instance.client` directly after initialization
+- **Bootstrap handles cross-flavor configuration** for dev/prod environments
+
 ## Tech Stack & Architecture
 - **Frontend**: Flutter (Dart) for cross-platform UI
 - **Backend**: Supabase (PostgreSQL, auth, realtime)
@@ -28,7 +58,7 @@
 - **State Management**: Riverpod with riverpod_generator
 - **Data Models**: Freezed for immutable classes
 - **Error Handling**: Result<T> for type-safe error handling in domain layer
-- **Architecture**: Offline-first (local-first, background sync)
+- **Architecture**: Offline-first (local-first, background auto-sync on app start)
 
 ## Use Case Structure Guidelines
 - **Folder Structure**: Group use cases by entity (e.g., `client/`, `project/`), then by action (e.g., `add_client/`, `update_client/`, `delete_client/`).

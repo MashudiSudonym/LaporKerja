@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,7 +9,7 @@ import 'package:lapor_kerja/data/repositories/task_repository_impl.dart';
 import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/task_entity.dart';
 
-@GenerateMocks([TasksDao, SupabaseService])
+@GenerateMocks([TasksDao, SupabaseService, Connectivity])
 import 'task_repository_impl_test.mocks.dart';
 
 // Helper extension for testing
@@ -34,12 +35,14 @@ extension TasksCompanionTestHelper on TasksCompanion {
 void main() {
   late MockTasksDao mockTasksDao;
   late MockSupabaseService mockSupabaseService;
+  late MockConnectivity mockConnectivity;
   late TaskRepositoryImpl repository;
 
   setUp(() {
     mockTasksDao = MockTasksDao();
     mockSupabaseService = MockSupabaseService();
-    repository = TaskRepositoryImpl(mockTasksDao, mockSupabaseService);
+    mockConnectivity = MockConnectivity();
+    repository = TaskRepositoryImpl(mockTasksDao, mockSupabaseService, mockConnectivity);
   });
 
   group('TaskRepositoryImpl', () {
@@ -57,6 +60,7 @@ void main() {
 
     test('should create task successfully', () async {
       when(mockTasksDao.upsertTask(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.createTask(testTask);
 
@@ -86,6 +90,7 @@ void main() {
 
     test('should update task successfully', () async {
       when(mockTasksDao.upsertTask(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.updateTask(testTask);
 
@@ -94,12 +99,16 @@ void main() {
     });
 
     test('should soft delete task successfully', () async {
-      when(mockTasksDao.softDeleteTask(1)).thenAnswer((_) async => 1);
+      // Mock getTaskById to return the task
+      when(mockTasksDao.watchTasksForProject(any))
+          .thenAnswer((_) => Stream.value([testTask.toCompanion().toTask()]));
+      when(mockTasksDao.upsertTask(any)).thenAnswer((_) async => 1);
+      when(mockConnectivity.checkConnectivity()).thenAnswer((_) async => ConnectivityResult.none);
 
       final result = await repository.softDeleteTask(1);
 
       expect(result.isSuccess, true);
-      verify(mockTasksDao.softDeleteTask(1)).called(1);
+      verify(mockTasksDao.upsertTask(any)).called(1);
     });
 
     test('should watch tasks for project and filter out deleted ones', () async {

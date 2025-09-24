@@ -30,6 +30,7 @@ LaporKerja adalah aplikasi offline-first untuk freelancer yang memungkinkan peng
 - Laporan & analitik dengan grafik
 - Pembuatan tagihan dalam format PDF
 - Notifikasi & pengingat untuk deadline
+- **Auto-sync**: Sinkronisasi otomatis saat aplikasi start (background, tidak memblokir UI)
 
 ## Tech Stack
 
@@ -48,6 +49,36 @@ LaporKerja adalah aplikasi offline-first untuk freelancer yang memungkinkan peng
 - Mise (untuk version management Flutter)
 - Android Studio atau VS Code dengan ekstensi Flutter
 - Perangkat Android untuk testing
+
+## Bootstrap Initialization
+
+File `lib/bootstrap.dart` bertanggung jawab untuk semua inisialisasi aplikasi sebelum `runApp()`. Tugas-tugas yang dilakukan:
+
+### 1. **WidgetsFlutterBinding.ensureInitialized()**
+   - Menginisialisasi binding Flutter untuk akses platform sebelum runApp
+
+### 2. **Request Permissions**
+   - `Permission.notification.request()` - untuk background sync notifications
+   - `Permission.ignoreBatteryOptimizations.request()` - untuk background tasks
+
+### 3. **Load Environment Variables**
+   - Load `.env` berdasarkan flavor:
+     - DEV: `assets/dev/.env`
+     - PROD: `assets/prod/.env`
+   - Menggunakan `dotenv.load(fileName: ...)`
+
+### 4. **Initialize Supabase**
+   - `Supabase.initialize()` dengan:
+     - `url`: `dotenv.env['SUPABASE_URL']!`
+     - `anonKey`: `dotenv.env['SUPABASE_ANON_KEY']!`
+
+### 5. **Run App**
+   - `runApp(ProviderScope(observers: [MyObserver()], child: await builder()))`
+
+### Aturan Penting:
+- **Semua inisialisasi yang memerlukan akses platform atau konfigurasi awal HARUS dilakukan di bootstrap.dart**
+- **Jangan lakukan inisialisasi di service classes atau providers** - gunakan `Supabase.instance.client` langsung setelah inisialisasi
+- **Bootstrap menangani cross-flavor configuration** untuk dev/prod environments
 
 ## Setup dan Instalasi
 

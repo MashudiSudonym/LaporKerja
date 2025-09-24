@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:drift/drift.dart';
 import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
@@ -7,11 +8,14 @@ import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/time_entry_entity.dart';
 import 'package:lapor_kerja/domain/repositories/time_entry_repository.dart';
 
+import '../../core/constants/constants.dart';
+
 class TimeEntryRepositoryImpl implements TimeEntryRepository {
   final TimeEntriesDao _timeEntriesDao;
   final SupabaseService _supabaseService;
+  final Connectivity _connectivity;
 
-  TimeEntryRepositoryImpl(this._timeEntriesDao, this._supabaseService);
+  TimeEntryRepositoryImpl(this._timeEntriesDao, this._supabaseService, this._connectivity);
 
   @override
   Stream<List<TimeEntryEntity>> watchAllTimeEntries() {
@@ -52,9 +56,23 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   @override
   Future<Result<void>> createTimeEntry(TimeEntryEntity timeEntry) async {
     try {
-      await _timeEntriesDao.upsertTimeEntry(timeEntry.toCompanion());
-      // Try to sync in background
-      _supabaseService.syncTimeEntries(this);
+      // Save locally first
+      final companion = timeEntry.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _timeEntriesDao.upsertTimeEntry(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('time_entries', timeEntry.toJson());
+          await markTimeEntryAsSynced(timeEntry.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync time entry on create: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create time entry: $e');
@@ -64,7 +82,23 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   @override
   Future<Result<void>> updateTimeEntry(TimeEntryEntity timeEntry) async {
     try {
-      await _timeEntriesDao.upsertTimeEntry(timeEntry.toCompanion());
+      // Save locally first
+      final companion = timeEntry.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _timeEntriesDao.upsertTimeEntry(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('time_entries', timeEntry.toJson());
+          await markTimeEntryAsSynced(timeEntry.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync time entry on update: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to update time entry: $e');
@@ -74,7 +108,30 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   @override
   Future<Result<void>> softDeleteTimeEntry(int id) async {
     try {
-      await _timeEntriesDao.softDeleteTimeEntry(id);
+      // Get time entry before deleting
+      final timeEntryResult = await getTimeEntryById(id);
+      if (timeEntryResult.isFailed) return timeEntryResult;
+
+      final timeEntry = timeEntryResult.resultValue!;
+      final updatedTimeEntry = timeEntry.copyWith(isDeleted: true);
+
+      // Save locally first
+      final companion = updatedTimeEntry.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _timeEntriesDao.upsertTimeEntry(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('time_entries', updatedTimeEntry.toJson());
+          await markTimeEntryAsSynced(id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync time entry on delete: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to delete time entry: $e');
@@ -105,6 +162,20 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to mark time entry as synced: $e');
+    }
+  }
+
+  /// Sync all unsynced time entries to Supabase
+  Future<void> syncAllTimeEntries() async {
+    final unsyncedResult = await getUnsyncedTimeEntries();
+    if (unsyncedResult.isFailed) return;
+
+    final unsyncedTimeEntries = unsyncedResult.resultValue!;
+    await _supabaseService.syncTimeEntries(unsyncedTimeEntries);
+
+    // Mark all as synced
+    for (final timeEntry in unsyncedTimeEntries) {
+      await markTimeEntryAsSynced(timeEntry.id);
     }
   }
 }

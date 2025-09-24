@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:drift/drift.dart';
 import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/data/datasources/local/app_database.dart';
@@ -7,11 +8,14 @@ import 'package:lapor_kerja/data/services/supabase_service.dart';
 import 'package:lapor_kerja/domain/entities/income_entity.dart';
 import 'package:lapor_kerja/domain/repositories/income_repository.dart';
 
+import '../../core/constants/constants.dart';
+
 class IncomeRepositoryImpl implements IncomeRepository {
   final IncomesDao _incomesDao;
   final SupabaseService _supabaseService;
+  final Connectivity _connectivity;
 
-  IncomeRepositoryImpl(this._incomesDao, this._supabaseService);
+  IncomeRepositoryImpl(this._incomesDao, this._supabaseService, this._connectivity);
 
   @override
   Stream<List<IncomeEntity>> watchAllIncomes() {
@@ -43,9 +47,23 @@ class IncomeRepositoryImpl implements IncomeRepository {
   @override
   Future<Result<void>> createIncome(IncomeEntity income) async {
     try {
-      await _incomesDao.upsertIncome(income.toCompanion());
-      // Try to sync in background
-      _supabaseService.syncIncomes(this);
+      // Save locally first
+      final companion = income.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _incomesDao.upsertIncome(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('incomes', income.toJson());
+          await markIncomeAsSynced(income.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync income on create: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to create income: $e');
@@ -55,7 +73,23 @@ class IncomeRepositoryImpl implements IncomeRepository {
   @override
   Future<Result<void>> updateIncome(IncomeEntity income) async {
     try {
-      await _incomesDao.upsertIncome(income.toCompanion());
+      // Save locally first
+      final companion = income.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _incomesDao.upsertIncome(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('incomes', income.toJson());
+          await markIncomeAsSynced(income.id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync income on update: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to update income: $e');
@@ -65,7 +99,30 @@ class IncomeRepositoryImpl implements IncomeRepository {
   @override
   Future<Result<void>> softDeleteIncome(int id) async {
     try {
-      await _incomesDao.softDeleteIncome(id);
+      // Get income before deleting
+      final incomeResult = await getIncomeById(id);
+      if (incomeResult.isFailed) return incomeResult;
+
+      final income = incomeResult.resultValue!;
+      final updatedIncome = income.copyWith(isDeleted: true);
+
+      // Save locally first
+      final companion = updatedIncome.toCompanion();
+      final companionWithUnsynced = companion.copyWith(isSynced: const Value(false));
+      await _incomesDao.upsertIncome(companionWithUnsynced);
+
+      // Try to sync to Supabase if online
+      final connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        try {
+          await _supabaseService.upsert('incomes', updatedIncome.toJson());
+          await markIncomeAsSynced(id);
+        } catch (e) {
+          Constants.logger.e('Failed to sync income on delete: $e');
+          // isSynced remains false
+        }
+      }
+
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to delete income: $e');
@@ -96,6 +153,20 @@ class IncomeRepositoryImpl implements IncomeRepository {
       return const Result.success(null);
     } catch (e) {
       return Result.failed('Failed to mark income as synced: $e');
+    }
+  }
+
+  /// Sync all unsynced incomes to Supabase
+  Future<void> syncAllIncomes() async {
+    final unsyncedResult = await getUnsyncedIncomes();
+    if (unsyncedResult.isFailed) return;
+
+    final unsyncedIncomes = unsyncedResult.resultValue!;
+    await _supabaseService.syncIncomes(unsyncedIncomes);
+
+    // Mark all as synced
+    for (final income in unsyncedIncomes) {
+      await markIncomeAsSynced(income.id);
     }
   }
 }
