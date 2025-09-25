@@ -31,7 +31,7 @@ dependencies:
 
   # Utilities - ID generation and date/time formatting
   uuid: ^4.1.0
-  intl: ^0.18.1
+  intl: ^0.20.2
   path: ^1.9.0
   path_provider: ^2.1.3
   permission_handler: ^11.3.1
@@ -43,6 +43,9 @@ dependencies:
   flutter_background_service: ^5.1.0
   flutter_dotenv: ^6.0.0
   logger: ^2.6.1
+
+  # UI Library - Shadcn UI components
+  shadcn_ui: ^0.31.8
 
 dev_dependencies:
   flutter_test:
