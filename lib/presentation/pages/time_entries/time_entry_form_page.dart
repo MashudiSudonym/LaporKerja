@@ -156,13 +156,13 @@ class _TimeEntryFormPageState extends ConsumerState<TimeEntryFormPage> {
                                      endTime,
                                    );
                              }
-                           } catch (e) {
-                             if (mounted) {
-                               ScaffoldMessenger.of(context).showSnackBar(
-                                 SnackBar(content: Text('Error: $e')),
-                               );
-                             }
-                           }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error: $e')),
+                                );
+                              }
+                            }
                          }
                        },
                  child: formState.isLoading

@@ -28,12 +28,12 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   // init basic configuration
   switch (Constants.appFlavor) {
-    case Constants.DEV:
-      await dotenv.load(fileName: "assets/${Constants.DEV}/.env");
-    case Constants.PROD:
-      await dotenv.load(fileName: "assets/${Constants.PROD}/.env");
+    case Constants.dev:
+      await dotenv.load(fileName: "assets/${Constants.dev}/.env");
+    case Constants.prod:
+      await dotenv.load(fileName: "assets/${Constants.prod}/.env");
     default:
-      await dotenv.load(fileName: "assets/${Constants.DEV}/.env");
+      await dotenv.load(fileName: "assets/${Constants.dev}/.env");
   }
 
   // Initialize Supabase

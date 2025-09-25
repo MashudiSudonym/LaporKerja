@@ -41,7 +41,7 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
     ref.listen(taskFormProvider, (previous, next) {
       next.when(
         data: (_) {
-          if (mounted) {
+          if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(isEditing ? 'Task updated' : 'Task added'),
@@ -51,7 +51,7 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
           }
         },
         error: (error, stack) {
-          if (mounted) {
+          if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error: $error')),
             );
@@ -96,10 +96,10 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
                ShadInputFormField(
                  controller: _taskNameController,
                  placeholder: const Text('Task Name'),
-                 validator: (value) {
-                   if (value == null || value.isEmpty) {
-                     return 'Task name is required';
-                   }
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Task name is required';
+                    }
                    if (value.trim().length < 2) {
                      return 'Task name must be at least 2 characters long';
                    }
@@ -183,13 +183,13 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
                                      deadline,
                                    );
                              }
-                           } catch (e) {
-                             if (mounted) {
-                               ScaffoldMessenger.of(context).showSnackBar(
-                                 SnackBar(content: Text('Error: $e')),
-                               );
-                             }
-                           }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error: $e')),
+                                );
+                              }
+                            }
                          }
                        },
                  child: formState.isLoading

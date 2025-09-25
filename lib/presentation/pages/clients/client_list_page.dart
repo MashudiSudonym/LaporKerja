@@ -63,7 +63,7 @@ class _ClientListPageState extends ConsumerState<ClientListPage> {
 
                 return RefreshIndicator(
                   onRefresh: () async => ref.invalidate(clientsProvider),
-                  child: _ClientListView(clients: filteredClients),
+                  child: _ClientListView(clients: filteredClients, isSearchResult: _searchQuery.isNotEmpty),
                 );
               },
               loading: () => const _ClientListSkeleton(),

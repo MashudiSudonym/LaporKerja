@@ -9,16 +9,16 @@ void main() {
       expect(Constants.appFlavor, isA<String?>());
     });
 
-    test('DEV constant', () {
-      expect(Constants.DEV, 'dev');
+    test('dev constant', () {
+      expect(Constants.dev, 'dev');
     });
 
-    test('PROD constant', () {
-      expect(Constants.PROD, 'prod');
+    test('prod constant', () {
+      expect(Constants.prod, 'prod');
     });
 
-    test('BLANK_STRING constant', () {
-      expect(Constants.BLANK_STRING, '');
+    test('blankString constant', () {
+      expect(Constants.blankString, '');
     });
 
     test('logger is initialized', () {

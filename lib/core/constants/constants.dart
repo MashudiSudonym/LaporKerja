@@ -9,14 +9,14 @@ class Constants {
       String.fromEnvironment('FLUTTER_APP_FLAVOR') != ''
       ? String.fromEnvironment('FLUTTER_APP_FLAVOR')
       : null;
-  static const DEV = 'dev';
-  static const PROD = 'prod';
+  static const dev = 'dev';
+  static const prod = 'prod';
 
   // logger
   static final logger = Logger(level: _getLogLevel());
 
   // others
-  static const BLANK_STRING = '';
+  static const blankString = '';
 
   static Level _getLogLevel() {
     // In test environment, only show warnings and errors
