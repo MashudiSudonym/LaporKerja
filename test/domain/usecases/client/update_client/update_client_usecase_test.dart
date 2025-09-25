@@ -10,7 +10,9 @@ import 'package:mockito/mockito.dart';
 import 'update_client_usecase_test.mocks.dart';
 
 @GenerateMocks([ClientRepository], customMocks: [MockSpec<ClientRepository>(as: #MockClientRepositoryForUpdate)])
+
 void main() {
+  provideDummy<Result<ClientEntity>>(Result.failed('dummy'));
   late UpdateClientUseCase useCase;
   late MockClientRepositoryForUpdate mockRepository;
 
@@ -26,21 +28,24 @@ void main() {
   group('UpdateClientUseCase', () {
     test('should call repository.updateClient with correct params', () async {
       // Arrange
-      final client = ClientEntity(
+      final existingClient = ClientEntity(
         id: 1,
-        name: 'Updated Client',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        name: 'Old Client',
+        contactInfo: 'old@example.com',
+        createdAt: DateTime(2023, 1, 1),
+        updatedAt: DateTime(2023, 1, 1),
         isDeleted: false,
       );
-      final params = UpdateClientParams(client);
-      when(mockRepository.updateClient(client)).thenAnswer((_) async => const Result.success(null));
+      final params = UpdateClientParams(1, 'Updated Client', 'updated@example.com');
+      when(mockRepository.getClientById(1)).thenAnswer((_) async => Result.success(existingClient));
+      when(mockRepository.updateClient(any)).thenAnswer((_) async => const Result.success(null));
 
       // Act
       final result = await useCase.call(params);
 
       // Assert
-      verify(mockRepository.updateClient(client)).called(1);
+      verify(mockRepository.getClientById(1)).called(1);
+      verify(mockRepository.updateClient(any)).called(1);
       expect(result.isSuccess, true);
     });
   });

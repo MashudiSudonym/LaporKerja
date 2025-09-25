@@ -146,51 +146,43 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
                  onPressed: formState.isLoading
                      ? null
                      : () async {
-                         if (_formKey.currentState!.validate()) {
-                           try {
-                             final projectId = int.parse(_projectIdController.text);
-                             final deadline = _deadlineController.text.isEmpty
-                                 ? null
-                                 : DateTime.parse(_deadlineController.text);
+                          if (_formKey.currentState!.validate()) {
+                            final projectId = int.parse(_projectIdController.text);
+                            final deadline = _deadlineController.text.isEmpty
+                                ? null
+                                : DateTime.parse(_deadlineController.text);
 
-                             if (isEditing) {
-                               await ref
-                                   .read(taskFormProvider.notifier)
-                                   .updateTask(
-                                     widget.taskId!,
-                                     projectId,
-                                     _taskNameController.text,
-                                     _descriptionController.text.isEmpty
-                                         ? null
-                                         : _descriptionController.text,
-                                     _statusController.text.isEmpty
-                                         ? null
-                                         : _statusController.text,
-                                     deadline,
-                                   );
-                             } else {
-                               await ref
-                                   .read(taskFormProvider.notifier)
-                                   .addTask(
-                                     projectId,
-                                     _taskNameController.text,
-                                     _descriptionController.text.isEmpty
-                                         ? null
-                                         : _descriptionController.text,
-                                     _statusController.text.isEmpty
-                                         ? null
-                                         : _statusController.text,
-                                     deadline,
-                                   );
-                             }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
+                            if (isEditing) {
+                              await ref
+                                  .read(taskFormProvider.notifier)
+                                  .updateTask(
+                                    widget.taskId!,
+                                    projectId,
+                                    _taskNameController.text,
+                                    _descriptionController.text.isEmpty
+                                        ? null
+                                        : _descriptionController.text,
+                                    _statusController.text.isEmpty
+                                        ? null
+                                        : _statusController.text,
+                                    deadline,
+                                  );
+                            } else {
+                              await ref
+                                  .read(taskFormProvider.notifier)
+                                  .addTask(
+                                    projectId,
+                                    _taskNameController.text,
+                                    _descriptionController.text.isEmpty
+                                        ? null
+                                        : _descriptionController.text,
+                                    _statusController.text.isEmpty
+                                        ? null
+                                        : _statusController.text,
+                                    deadline,
+                                  );
                             }
-                         }
+                          }
                        },
                  child: formState.isLoading
                      ? const CircularProgressIndicator()

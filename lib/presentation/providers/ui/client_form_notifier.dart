@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../domain/entities/client_entity.dart';
 import '../../../domain/usecases/client/add_client/add_client_params.dart';
 import '../../../domain/usecases/client/update_client/update_client_params.dart';
 import '../usecases/client_usecases_provider.dart';
@@ -18,16 +17,7 @@ class ClientFormNotifier extends _$ClientFormNotifier {
   Future<void> addClient(String name, String? contactInfo) async {
     state = const AsyncLoading();
 
-    final client = ClientEntity(
-      id: 0, // Will be set by database
-      name: name,
-      contactInfo: contactInfo,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      isDeleted: false,
-    );
-
-    final params = AddClientParams(client);
+    final params = AddClientParams(name, contactInfo);
 
     final addClientUseCase = ref.read(addClientUseCaseProvider);
     final result = await addClientUseCase(params);
@@ -43,16 +33,7 @@ class ClientFormNotifier extends _$ClientFormNotifier {
   Future<void> updateClient(int id, String name, String? contactInfo) async {
     state = const AsyncLoading();
 
-    final client = ClientEntity(
-      id: id,
-      name: name,
-      contactInfo: contactInfo,
-      createdAt: DateTime.now(), // This should be loaded from existing
-      updatedAt: DateTime.now(),
-      isDeleted: false,
-    );
-
-    final params = UpdateClientParams(client);
+    final params = UpdateClientParams(id, name, contactInfo);
 
     final updateClientUseCase = ref.read(updateClientUseCaseProvider);
     final result = await updateClientUseCase(params);

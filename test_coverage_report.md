@@ -132,7 +132,7 @@
 - Repository interfaces now use Result<T> for error handling in Future methods
 - Data layer mappers (entity-model conversion) are implemented and tested
 - Use cases and repository implementations use dependency injection for better testability
-- Data layer (Drift models/DAOs) and presentation layer are not yet tested
+- Data layer (Drift models/DAOs) and presentation layer are not yet tested - attempts made to add tests but encountered mocking complexities
 - Bootstrap and main application files are not tested
 - HTML coverage report available and up-to-date in `coverage/html/index.html`
 - To regenerate: `flutter test --coverage && genhtml coverage/lcov.info -o coverage/html`

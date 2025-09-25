@@ -77,14 +77,14 @@
     - **Alasan Prioritas**: Robustness; memastikan semua layers testable sebelum rilis.
     - **Kompleksitas**: Medium (mocking, test setup).
     - **Estimasi**: 1 minggu.
-    - **Status**: Pending
+    - **Status**: Completed
 
 11. **Standardize Error Handling**
     - **Deskripsi**: Ganti try-catch di presentation dengan Result<T> untuk konsistensi; pastikan semua async ops menggunakan Result<T>.
     - **Alasan Prioritas**: Type-safe error handling; hindari exceptions di domain layer.
     - **Kompleksitas**: Low-Medium (refactor existing code).
     - **Estimasi**: 0.5 minggu.
-    - **Status**: Pending
+    - **Status**: Completed
 
 ### Prioritas Medium (Medium) - Readability & Dependency
 12. **Review Dependency Injection**
@@ -92,7 +92,7 @@
     - **Alasan Prioritas**: Dependency rule; maintainability.
     - **Kompleksitas**: Low (code review & refactor).
     - **Estimasi**: 0.5 minggu.
-    - **Status**: Pending
+    - **Status**: Completed
 
 13. **Add Development Order Documentation**
     - **Deskripsi**: Dokumentasikan urutan development (Domain → Data → Presentation) per fitur baru di todo.md atau AGENTS.md.

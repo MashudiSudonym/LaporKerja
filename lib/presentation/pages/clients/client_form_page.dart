@@ -97,32 +97,28 @@ class _ClientFormPageState extends ConsumerState<ClientFormPage> {
                  onPressed: formState.isLoading
                      ? null
                      : () async {
-                         if (_formKey.currentState!.validate()) {
-                           try {
-                             if (isEditing) {
-                               await ref
-                                   .read(clientFormProvider.notifier)
-                                   .updateClient(
-                                     widget.clientId!,
-                                     _nameController.text,
-                                     _contactController.text.isEmpty
-                                         ? null
-                                         : _contactController.text,
-                                   );
-                             } else {
-                               await ref
-                                   .read(clientFormProvider.notifier)
-                                   .addClient(
-                                     _nameController.text,
-                                     _contactController.text.isEmpty
-                                         ? null
-                                         : _contactController.text,
-                                   );
-                             }
-                           } catch (e) {
-                             // Error handled by listener
-                           }
-                         }
+                          if (_formKey.currentState!.validate()) {
+                            if (isEditing) {
+                              await ref
+                                  .read(clientFormProvider.notifier)
+                                  .updateClient(
+                                    widget.clientId!,
+                                    _nameController.text,
+                                    _contactController.text.isEmpty
+                                        ? null
+                                        : _contactController.text,
+                                  );
+                            } else {
+                              await ref
+                                  .read(clientFormProvider.notifier)
+                                  .addClient(
+                                    _nameController.text,
+                                    _contactController.text.isEmpty
+                                        ? null
+                                        : _contactController.text,
+                                  );
+                            }
+                          }
                        },
                  child: formState.isLoading
                      ? const CircularProgressIndicator()

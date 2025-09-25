@@ -130,40 +130,32 @@ class _TimeEntryFormPageState extends ConsumerState<TimeEntryFormPage> {
                  onPressed: formState.isLoading
                      ? null
                      : () async {
-                         if (_formKey.currentState!.validate()) {
-                           try {
-                             final taskId = int.parse(_taskIdController.text);
-                             final startTime = DateTime.parse(_startTimeController.text);
-                             final endTime = _endTimeController.text.isEmpty
-                                 ? null
-                                 : DateTime.parse(_endTimeController.text);
+                          if (_formKey.currentState!.validate()) {
+                            final taskId = int.parse(_taskIdController.text);
+                            final startTime = DateTime.parse(_startTimeController.text);
+                            final endTime = _endTimeController.text.isEmpty
+                                ? null
+                                : DateTime.parse(_endTimeController.text);
 
-                             if (isEditing) {
-                               await ref
-                                   .read(timeEntryFormProvider.notifier)
-                                   .updateTimeEntry(
-                                     widget.timeEntryId!,
-                                     taskId,
-                                     startTime,
-                                     endTime,
-                                   );
-                             } else {
-                               await ref
-                                   .read(timeEntryFormProvider.notifier)
-                                   .addTimeEntry(
-                                     taskId,
-                                     startTime,
-                                     endTime,
-                                   );
-                             }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
+                            if (isEditing) {
+                              await ref
+                                  .read(timeEntryFormProvider.notifier)
+                                  .updateTimeEntry(
+                                    widget.timeEntryId!,
+                                    taskId,
+                                    startTime,
+                                    endTime,
+                                  );
+                            } else {
+                              await ref
+                                  .read(timeEntryFormProvider.notifier)
+                                  .addTimeEntry(
+                                    taskId,
+                                    startTime,
+                                    endTime,
+                                  );
                             }
-                         }
+                          }
                        },
                  child: formState.isLoading
                      ? const CircularProgressIndicator()

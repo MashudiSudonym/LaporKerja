@@ -143,46 +143,38 @@ class _IncomeFormPageState extends ConsumerState<IncomeFormPage> {
                  onPressed: formState.isLoading
                      ? null
                      : () async {
-                         if (_formKey.currentState!.validate()) {
-                           try {
-                             final projectId = int.parse(_projectIdController.text);
-                             final amount = double.parse(_amountController.text);
-                             final paymentDate = _paymentDateController.text.isEmpty
-                                 ? null
-                                 : DateTime.parse(_paymentDateController.text);
+                          if (_formKey.currentState!.validate()) {
+                            final projectId = int.parse(_projectIdController.text);
+                            final amount = double.parse(_amountController.text);
+                            final paymentDate = _paymentDateController.text.isEmpty
+                                ? null
+                                : DateTime.parse(_paymentDateController.text);
 
-                             if (isEditing) {
-                               await ref
-                                   .read(incomeFormProvider.notifier)
-                                   .updateIncome(
-                                     widget.incomeId!,
-                                     projectId,
-                                     amount,
-                                     _paymentStatusController.text.isEmpty
-                                         ? null
-                                         : _paymentStatusController.text,
-                                     paymentDate,
-                                   );
-                             } else {
-                               await ref
-                                   .read(incomeFormProvider.notifier)
-                                   .addIncome(
-                                     projectId,
-                                     amount,
-                                     _paymentStatusController.text.isEmpty
-                                         ? null
-                                         : _paymentStatusController.text,
-                                     paymentDate,
-                                   );
-                             }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
+                            if (isEditing) {
+                              await ref
+                                  .read(incomeFormProvider.notifier)
+                                  .updateIncome(
+                                    widget.incomeId!,
+                                    projectId,
+                                    amount,
+                                    _paymentStatusController.text.isEmpty
+                                        ? null
+                                        : _paymentStatusController.text,
+                                    paymentDate,
+                                  );
+                            } else {
+                              await ref
+                                  .read(incomeFormProvider.notifier)
+                                  .addIncome(
+                                    projectId,
+                                    amount,
+                                    _paymentStatusController.text.isEmpty
+                                        ? null
+                                        : _paymentStatusController.text,
+                                    paymentDate,
+                                  );
                             }
-                         }
+                          }
                        },
                  child: formState.isLoading
                      ? const CircularProgressIndicator()

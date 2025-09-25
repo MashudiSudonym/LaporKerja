@@ -42,32 +42,22 @@ class _MainPageState extends ConsumerState<MainPage> {
         title: Text(_titles[_selectedIndex]),
         elevation: 0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.sync, color: Colors.black),
-            onPressed: () async {
-              try {
-                await ref.read(syncProvider.notifier).syncAll();
-                if (mounted) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Sync completed successfully'),
-                      ),
-                    );
-                  });
-                }
-              } catch (e) {
+            IconButton(
+              icon: const Icon(Icons.sync, color: Colors.black),
+              onPressed: () async {
+                final result = await ref.read(syncProvider.notifier).syncAll();
                 if (mounted) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Sync failed: $e'),
+                        content: Text(result.isSuccess
+                            ? 'Sync completed successfully'
+                            : 'Sync failed: ${result.errorMessage}'),
                       ),
                     );
                   });
                 }
-              }
-            },
+              },
           ),
         ],
       ),

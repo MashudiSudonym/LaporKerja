@@ -16,7 +16,8 @@ class ClientsNotifier extends _$ClientsNotifier {
     return getClients();
   }
 
-  Future<void> addClient(AddClientParams params) async {
+  Future<void> addClient(String name, String? contactInfo) async {
+    final params = AddClientParams(name, contactInfo);
     final addClient = ref.read(addClientUseCaseProvider);
     final result = await addClient(params);
     if (result.isFailed) {
@@ -25,7 +26,8 @@ class ClientsNotifier extends _$ClientsNotifier {
     ref.invalidateSelf();
   }
 
-  Future<void> updateClient(UpdateClientParams params) async {
+  Future<void> updateClient(int id, String name, String? contactInfo) async {
+    final params = UpdateClientParams(id, name, contactInfo);
     final updateClient = ref.read(updateClientUseCaseProvider);
     final result = await updateClient(params);
     if (result.isFailed) {

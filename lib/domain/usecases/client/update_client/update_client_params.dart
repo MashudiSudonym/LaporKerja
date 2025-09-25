@@ -1,7 +1,7 @@
-import '../../../entities/client_entity.dart';
-
 class UpdateClientParams {
-  final ClientEntity client;
+  final int id;
+  final String name;
+  final String? contactInfo;
 
-  UpdateClientParams(this.client);
+  UpdateClientParams(this.id, this.name, this.contactInfo);
 }

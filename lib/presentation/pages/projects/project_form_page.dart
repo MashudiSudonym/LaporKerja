@@ -95,32 +95,28 @@ class _ProjectFormPageState extends ConsumerState<ProjectFormPage> {
                  onPressed: formState.isLoading
                      ? null
                      : () async {
-                         if (_formKey.currentState!.validate()) {
-                           try {
-                             if (isEditing) {
-                               await ref
-                                   .read(projectFormProvider.notifier)
-                                   .updateProject(
-                                     widget.projectId!,
-                                     _nameController.text,
-                                     _descriptionController.text.isEmpty
-                                         ? null
-                                         : _descriptionController.text,
-                                   );
-                             } else {
-                               await ref
-                                   .read(projectFormProvider.notifier)
-                                   .addProject(
-                                     _nameController.text,
-                                     _descriptionController.text.isEmpty
-                                         ? null
-                                         : _descriptionController.text,
-                                   );
-                             }
-                           } catch (e) {
-                             // Error handled by listener
-                           }
-                         }
+                          if (_formKey.currentState!.validate()) {
+                            if (isEditing) {
+                              await ref
+                                  .read(projectFormProvider.notifier)
+                                  .updateProject(
+                                    widget.projectId!,
+                                    _nameController.text,
+                                    _descriptionController.text.isEmpty
+                                        ? null
+                                        : _descriptionController.text,
+                                  );
+                            } else {
+                              await ref
+                                  .read(projectFormProvider.notifier)
+                                  .addProject(
+                                    _nameController.text,
+                                    _descriptionController.text.isEmpty
+                                        ? null
+                                        : _descriptionController.text,
+                              );
+                            }
+                          }
                        },
                  child: formState.isLoading
                      ? const CircularProgressIndicator()
