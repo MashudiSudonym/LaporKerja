@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../../providers/ui/task_form_notifier.dart';
 
@@ -70,117 +71,131 @@ class _TaskFormPageState extends ConsumerState<TaskFormPage> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
-                controller: _projectIdController,
-                decoration: const InputDecoration(
-                  labelText: 'Project ID',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter project ID';
-                  }
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _projectIdController,
+                 decoration: const InputDecoration(
+                   labelText: 'Project ID',
+                   border: OutlineInputBorder(),
+                 ),
+                 keyboardType: TextInputType.number,
+                 validator: (value) {
+                   if (value == null || value.isEmpty) {
+                     return 'Project ID is required';
+                   }
+                   final projectId = int.tryParse(value);
+                   if (projectId == null) {
+                     return 'Project ID must be a valid number';
+                   }
+                   if (projectId <= 0) {
+                     return 'Project ID must be a positive number';
+                   }
+                   return null;
+                 },
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _taskNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Task Name',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter task name';
-                  }
-                  return null;
-                },
-              ),
+               ShadInputFormField(
+                 controller: _taskNameController,
+                 placeholder: const Text('Task Name'),
+                 validator: (value) {
+                   if (value == null || value.isEmpty) {
+                     return 'Task name is required';
+                   }
+                   if (value.trim().length < 2) {
+                     return 'Task name must be at least 2 characters long';
+                   }
+                   return null;
+                 },
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description (optional)',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
+               TextFormField(
+                 controller: _descriptionController,
+                 decoration: const InputDecoration(
+                   labelText: 'Description (optional)',
+                   border: OutlineInputBorder(),
+                 ),
+                 maxLines: 3,
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _statusController,
-                decoration: const InputDecoration(
-                  labelText: 'Status (optional)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+               TextFormField(
+                 controller: _statusController,
+                 decoration: const InputDecoration(
+                   labelText: 'Status (optional)',
+                   border: OutlineInputBorder(),
+                 ),
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _deadlineController,
-                decoration: const InputDecoration(
-                  labelText: 'Deadline (YYYY-MM-DD, optional)',
-                  border: OutlineInputBorder(),
+                TextFormField(
+                  controller: _deadlineController,
+                  decoration: const InputDecoration(
+                    labelText: 'Deadline (YYYY-MM-DD, optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty) {
+                      try {
+                        DateTime.parse(value);
+                      } catch (e) {
+                        return 'Deadline must be in YYYY-MM-DD format';
+                      }
+                    }
+                    return null;
+                  },
                 ),
-              ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: formState.isLoading
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            try {
-                              final projectId = int.parse(_projectIdController.text);
-                              final deadline = _deadlineController.text.isEmpty
-                                  ? null
-                                  : DateTime.parse(_deadlineController.text);
+               ShadButton(
+                 onPressed: formState.isLoading
+                     ? null
+                     : () async {
+                         if (_formKey.currentState!.validate()) {
+                           try {
+                             final projectId = int.parse(_projectIdController.text);
+                             final deadline = _deadlineController.text.isEmpty
+                                 ? null
+                                 : DateTime.parse(_deadlineController.text);
 
-                              if (isEditing) {
-                                await ref
-                                    .read(taskFormProvider.notifier)
-                                    .updateTask(
-                                      widget.taskId!,
-                                      projectId,
-                                      _taskNameController.text,
-                                      _descriptionController.text.isEmpty
-                                          ? null
-                                          : _descriptionController.text,
-                                      _statusController.text.isEmpty
-                                          ? null
-                                          : _statusController.text,
-                                      deadline,
-                                    );
-                              } else {
-                                await ref
-                                    .read(taskFormProvider.notifier)
-                                    .addTask(
-                                      projectId,
-                                      _taskNameController.text,
-                                      _descriptionController.text.isEmpty
-                                          ? null
-                                          : _descriptionController.text,
-                                      _statusController.text.isEmpty
-                                          ? null
-                                          : _statusController.text,
-                                      deadline,
-                                    );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
-                            }
-                          }
-                        },
-                  child: formState.isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(isEditing ? 'Update Task' : 'Add Task'),
-                ),
-              ),
+                             if (isEditing) {
+                               await ref
+                                   .read(taskFormProvider.notifier)
+                                   .updateTask(
+                                     widget.taskId!,
+                                     projectId,
+                                     _taskNameController.text,
+                                     _descriptionController.text.isEmpty
+                                         ? null
+                                         : _descriptionController.text,
+                                     _statusController.text.isEmpty
+                                         ? null
+                                         : _statusController.text,
+                                     deadline,
+                                   );
+                             } else {
+                               await ref
+                                   .read(taskFormProvider.notifier)
+                                   .addTask(
+                                     projectId,
+                                     _taskNameController.text,
+                                     _descriptionController.text.isEmpty
+                                         ? null
+                                         : _descriptionController.text,
+                                     _statusController.text.isEmpty
+                                         ? null
+                                         : _statusController.text,
+                                     deadline,
+                                   );
+                             }
+                           } catch (e) {
+                             if (mounted) {
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(content: Text('Error: $e')),
+                               );
+                             }
+                           }
+                         }
+                       },
+                 child: formState.isLoading
+                     ? const CircularProgressIndicator()
+                     : Text(isEditing ? 'Update Task' : 'Add Task'),
+               ),
             ],
           ),
         ),

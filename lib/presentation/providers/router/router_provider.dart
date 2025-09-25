@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -25,85 +26,235 @@ Raw<GoRouter> router(Ref ref) => GoRouter(
     ),
     GoRoute(
       path: '/projects',
-      builder: (context, state) => const MainPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const MainPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
       routes: [
         GoRoute(
           path: 'new',
-          builder: (context, state) => const ProjectFormPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const ProjectFormPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         ),
         GoRoute(
           path: ':id/edit',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            return ProjectFormPage(projectId: id);
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: ProjectFormPage(projectId: id),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            );
           },
         ),
       ],
     ),
     GoRoute(
       path: '/clients',
-      builder: (context, state) => const ClientListPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const ClientListPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
       routes: [
         GoRoute(
           path: 'new',
-          builder: (context, state) => const ClientFormPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const ClientFormPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         ),
         GoRoute(
           path: ':id/edit',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            return ClientFormPage(clientId: id);
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: ClientFormPage(clientId: id),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            );
           },
         ),
       ],
     ),
     GoRoute(
       path: '/tasks',
-      builder: (context, state) => const TaskListPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const TaskListPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
       routes: [
         GoRoute(
           path: 'new',
-          builder: (context, state) => const TaskFormPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const TaskFormPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         ),
         GoRoute(
           path: ':id/edit',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            return TaskFormPage(taskId: id);
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: TaskFormPage(taskId: id),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            );
           },
         ),
       ],
     ),
     GoRoute(
       path: '/time-entries',
-      builder: (context, state) => const TimeEntryListPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const TimeEntryListPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
       routes: [
         GoRoute(
           path: 'new',
-          builder: (context, state) => const TimeEntryFormPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const TimeEntryFormPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         ),
         GoRoute(
           path: ':id/edit',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            return TimeEntryFormPage(timeEntryId: id);
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: TimeEntryFormPage(timeEntryId: id),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            );
           },
         ),
       ],
     ),
     GoRoute(
       path: '/incomes',
-      builder: (context, state) => const IncomeListPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const IncomeListPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
       routes: [
         GoRoute(
           path: 'new',
-          builder: (context, state) => const IncomeFormPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const IncomeFormPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
         ),
         GoRoute(
           path: ':id/edit',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final id = int.parse(state.pathParameters['id']!);
-            return IncomeFormPage(incomeId: id);
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: IncomeFormPage(incomeId: id),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            );
           },
         ),
       ],

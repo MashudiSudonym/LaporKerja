@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../../providers/ui/time_entry_form_notifier.dart';
 
@@ -66,89 +67,108 @@ class _TimeEntryFormPageState extends ConsumerState<TimeEntryFormPage> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: _taskIdController,
-                decoration: const InputDecoration(
-                  labelText: 'Task ID',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter task ID';
-                  }
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _taskIdController,
+                 decoration: const InputDecoration(
+                   labelText: 'Task ID',
+                   border: OutlineInputBorder(),
+                 ),
+                 keyboardType: TextInputType.number,
+                 validator: (value) {
+                   if (value == null || value.isEmpty) {
+                     return 'Task ID is required';
+                   }
+                   final taskId = int.tryParse(value);
+                   if (taskId == null) {
+                     return 'Task ID must be a valid number';
+                   }
+                   if (taskId <= 0) {
+                     return 'Task ID must be a positive number';
+                   }
+                   return null;
+                 },
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _startTimeController,
-                decoration: const InputDecoration(
-                  labelText: 'Start Time (YYYY-MM-DD HH:MM:SS)',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter start time';
-                  }
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _startTimeController,
+                 decoration: const InputDecoration(
+                   labelText: 'Start Time (YYYY-MM-DD HH:MM:SS)',
+                   border: OutlineInputBorder(),
+                 ),
+                 validator: (value) {
+                   if (value == null || value.isEmpty) {
+                     return 'Start time is required';
+                   }
+                   try {
+                     DateTime.parse(value);
+                   } catch (e) {
+                     return 'Start time must be in YYYY-MM-DD HH:MM:SS format';
+                   }
+                   return null;
+                 },
+               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _endTimeController,
-                decoration: const InputDecoration(
-                  labelText: 'End Time (optional, YYYY-MM-DD HH:MM:SS)',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+               TextFormField(
+                 controller: _endTimeController,
+                 decoration: const InputDecoration(
+                   labelText: 'End Time (optional, YYYY-MM-DD HH:MM:SS)',
+                   border: OutlineInputBorder(),
+                 ),
+                 validator: (value) {
+                   if (value != null && value.isNotEmpty) {
+                     try {
+                       DateTime.parse(value);
+                     } catch (e) {
+                       return 'End time must be in YYYY-MM-DD HH:MM:SS format';
+                     }
+                   }
+                   return null;
+                 },
+               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: formState.isLoading
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            try {
-                              final taskId = int.parse(_taskIdController.text);
-                              final startTime = DateTime.parse(_startTimeController.text);
-                              final endTime = _endTimeController.text.isEmpty
-                                  ? null
-                                  : DateTime.parse(_endTimeController.text);
+               ShadButton(
+                 onPressed: formState.isLoading
+                     ? null
+                     : () async {
+                         if (_formKey.currentState!.validate()) {
+                           try {
+                             final taskId = int.parse(_taskIdController.text);
+                             final startTime = DateTime.parse(_startTimeController.text);
+                             final endTime = _endTimeController.text.isEmpty
+                                 ? null
+                                 : DateTime.parse(_endTimeController.text);
 
-                              if (isEditing) {
-                                await ref
-                                    .read(timeEntryFormProvider.notifier)
-                                    .updateTimeEntry(
-                                      widget.timeEntryId!,
-                                      taskId,
-                                      startTime,
-                                      endTime,
-                                    );
-                              } else {
-                                await ref
-                                    .read(timeEntryFormProvider.notifier)
-                                    .addTimeEntry(
-                                      taskId,
-                                      startTime,
-                                      endTime,
-                                    );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error: $e')),
-                                );
-                              }
-                            }
-                          }
-                        },
-                  child: formState.isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(isEditing ? 'Update Time Entry' : 'Add Time Entry'),
-                ),
-              ),
+                             if (isEditing) {
+                               await ref
+                                   .read(timeEntryFormProvider.notifier)
+                                   .updateTimeEntry(
+                                     widget.timeEntryId!,
+                                     taskId,
+                                     startTime,
+                                     endTime,
+                                   );
+                             } else {
+                               await ref
+                                   .read(timeEntryFormProvider.notifier)
+                                   .addTimeEntry(
+                                     taskId,
+                                     startTime,
+                                     endTime,
+                                   );
+                             }
+                           } catch (e) {
+                             if (mounted) {
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(content: Text('Error: $e')),
+                               );
+                             }
+                           }
+                         }
+                       },
+                 child: formState.isLoading
+                     ? const CircularProgressIndicator()
+                     : Text(isEditing ? 'Update Time Entry' : 'Add Time Entry'),
+               ),
             ],
           ),
         ),

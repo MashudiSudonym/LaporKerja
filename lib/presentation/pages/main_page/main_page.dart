@@ -39,11 +39,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _titles[_selectedIndex],
-          style: const TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
+        title: Text(_titles[_selectedIndex]),
         elevation: 0,
         actions: [
           IconButton(
@@ -56,7 +52,6 @@ class _MainPageState extends ConsumerState<MainPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Sync completed successfully'),
-                        backgroundColor: Colors.black,
                       ),
                     );
                   });
@@ -67,7 +62,6 @@ class _MainPageState extends ConsumerState<MainPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Sync failed: $e'),
-                        backgroundColor: Colors.red,
                       ),
                     );
                   });
@@ -85,9 +79,6 @@ class _MainPageState extends ConsumerState<MainPage> {
             _selectedIndex = index;
           });
         },
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
