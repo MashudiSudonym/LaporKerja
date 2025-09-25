@@ -9,7 +9,12 @@ import '../../domain/entities/task_entity.dart';
 import '../../domain/entities/time_entry_entity.dart';
 
 class SupabaseService {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseClient _supabase;
+
+  SupabaseService() : _supabase = Supabase.instance.client;
+
+  // Constructor for testing
+  SupabaseService.test(this._supabase);
 
   /// Generic upsert method for any table
   Future<void> upsert<T>(String table, Map<String, dynamic> data) async {
