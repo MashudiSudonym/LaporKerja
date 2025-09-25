@@ -1,6 +1,5 @@
 import 'package:lapor_kerja/core/utils/result.dart';
 import 'package:lapor_kerja/core/utils/usecase.dart';
-import 'package:lapor_kerja/domain/entities/client_entity.dart';
 import 'package:lapor_kerja/domain/repositories/client_repository.dart';
 import 'update_client_params.dart';
 
