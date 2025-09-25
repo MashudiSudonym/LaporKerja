@@ -60,6 +60,21 @@ File `lib/bootstrap.dart` handles all app initialization before `runApp()`. Task
 - **Error Handling**: Result<T> for type-safe error handling in domain layer
 - **Architecture**: Offline-first (local-first, background auto-sync on app start)
 
+## Current Implementation Status
+- **Core Features Implemented**: CRUD for clients, projects, tasks, time entries, and incomes with full domain/data/presentation layers.
+- **Database**: Drift schema with tables for all entities, Supabase integration ready.
+- **Bootstrap**: Initialization handles permissions, env loading, and Supabase setup.
+- **Next Priorities**: Dashboard, active timer, notifications, background sync, reports, and invoicing.
+
+## Clean Architecture Development Guidelines
+- **Layer Order**: Always develop from the innermost layer outward to maintain dependency direction (Domain → Data → Presentation). This ensures inner layers are stable and testable before building outer layers.
+- **Domain Layer First**: Start with Entities (immutable models with Freezed), then Repository interfaces, then Use Cases. This defines business logic without external dependencies.
+- **Data Layer Second**: Implement Repository interfaces with concrete classes, Data Sources (local/remote), and Mappers. Ensure all data operations return `Result<T>` for type-safe error handling.
+- **Presentation Layer Last**: Build UI components, Providers (Riverpod), and Pages only after domain and data layers are complete. Use providers to bridge UI with use cases.
+- **Dependency Rule**: Inner layers (Domain) should not depend on outer layers (Data/Presentation). Use Dependency Injection (Riverpod providers) for inversion of control.
+- **Consistency & Readability**: Follow established patterns (e.g., Use Case structure below), use explicit types, avoid tight coupling, and ensure each layer has clear responsibilities for maintainability and learning purposes.
+- **Robustness**: Write tests for each layer (unit for domain/data, widget for presentation) before moving to the next. Use `Result<T>` to handle errors gracefully without exceptions in domain layer.
+
 ## Use Case Structure Guidelines
 - **Folder Structure**: Group use cases by entity (e.g., `client/`, `project/`), then by action (e.g., `add_client/`, `update_client/`, `delete_client/`).
 - **File Separation**: Separate Params and UseCase into different files (e.g., `add_client_params.dart` and `add_client_usecase.dart`).

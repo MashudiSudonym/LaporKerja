@@ -8,29 +8,29 @@ LaporKerja adalah aplikasi offline-first untuk freelancer yang memungkinkan peng
 
 ## Fitur Utama
 
-### Manajemen Proyek dan Tugas
+### Manajemen Proyek dan Tugas ✅ (Implemented)
 - Membuat proyek baru dengan asosiasi klien
 - Menambahkan tugas di bawah setiap proyek
 - Status tugas: To-Do, In Progress, Completed, Revision
 - Penetapan deadline untuk proyek dan tugas
 
-### Pelacakan Waktu
-- Timer aktif dengan fitur start/stop
-- Entri waktu manual
-- Laporan waktu per tugas, proyek, atau rentang waktu
+### Pelacakan Waktu ✅ (CRUD Implemented, Timer Pending)
+- Entri waktu manual ✅
+- Timer aktif dengan fitur start/stop 🔄 (In Development)
+- Laporan waktu per tugas, proyek, atau rentang waktu 🔄 (Basic reports available)
 
-### Manajemen Pendapatan
+### Manajemen Pendapatan ✅ (Implemented)
 - Pencatatan pendapatan per proyek
 - Status pembayaran: Belum Ditagih, Belum Lunas, Lunas, Lewat Jatuh Tempo
 - Pencatatan uang muka atau pembayaran termin
 
 ### Fitur Tambahan
-- Dashboard utama dengan ringkasan informasi
-- Manajemen klien
-- Laporan & analitik dengan grafik
-- Pembuatan tagihan dalam format PDF
-- Notifikasi & pengingat untuk deadline
-- **Auto-sync**: Sinkronisasi otomatis saat aplikasi start (background, tidak memblokir UI)
+- Dashboard utama dengan ringkasan informasi 🔄 (In Development)
+- Manajemen klien ✅ (Implemented)
+- Laporan & analitik dengan grafik 🔄 (Basic reports, charts pending)
+- Pembuatan tagihan dalam format PDF 🔄 (Planned)
+- Notifikasi & pengingat untuk deadline 🔄 (In Development)
+- **Auto-sync**: Sinkronisasi otomatis saat aplikasi start (background, tidak memblokir UI) 🔄 (Basic sync, full background pending)
 
 ## Tech Stack
 
@@ -131,6 +131,8 @@ File `lib/bootstrap.dart` bertanggung jawab untuk semua inisialisasi aplikasi se
 - **Format**: `dart format .`
 - **Code generation**: `flutter pub run build_runner build`
 - **Database generation**: `flutter pub run build_runner build --delete-conflicting-outputs` (untuk Drift)
+- **Sync data**: Manual sync via UI (background auto-sync in development)
+- **Generate reports**: Basic reports available in time entries page (advanced analytics pending)
 
 ## Struktur Project
 
