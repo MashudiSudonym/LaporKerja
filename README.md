@@ -138,69 +138,92 @@ File `lib/bootstrap.dart` bertanggung jawab untuk semua inisialisasi aplikasi se
 
 ```
 lapor_kerja/
-├── android/
+├── android/                          # Android platform configuration
 │   ├── app/
 │   │   ├── src/
-│   │   │   ├── debug/
-│   │   │   ├── main/
-│   │   │   │   ├── kotlin/
+│   │   │   ├── debug/                # Debug build configuration
+│   │   │   ├── main/                 # Main Android source
+│   │   │   │   ├── kotlin/           # Kotlin native code
 │   │   │   │   │   └── com/tigasatudesember/lapor_kerja/
-│   │   │   │   ├── res/
-│   │   │   │   │   ├── drawable/
-│   │   │   │   │   ├── drawable-v21/
-│   │   │   │   │   ├── mipmap-hdpi/
-│   │   │   │   │   ├── mipmap-mdpi/
-│   │   │   │   │   ├── mipmap-xhdpi/
-│   │   │   │   │   ├── mipmap-xxhdpi/
-│   │   │   │   │   ├── mipmap-xxxhdpi/
-│   │   │   │   │   ├── values/
-│   │   │   │   │   └── values-night/
+│   │   │   │   ├── res/              # Android resources
+
 │   │   │   │   └── AndroidManifest.xml
-│   │   │   ├── profile/
+│   │   │   ├── profile/              # Profile build configuration
 │   │   │   └── AndroidManifest.xml
-│   │   ├── build.gradle.kts
+│   │   ├── build.gradle.kts         # App-level Gradle config
 │   │   └── .gitignore
-│   ├── gradle/
+│   ├── gradle/                       # Gradle wrapper
 │   │   └── wrapper/
 │   │       └── gradle-wrapper.properties
 │   ├── .gitignore
 │   ├── build.gradle.kts
 │   ├── gradle.properties
 │   └── settings.gradle.kts
-├── lib/
-│   ├── core/
-│   │   ├── constants/
-│   │   └── utils/
-│   ├── presentation/
-│   │   ├── pages/
-│   │   │   └── main_page/
-│   │   └── providers/
-│   │       └── router/
-│   ├── app.dart
-│   ├── bootstrap.dart
-│   ├── main_dev.dart
-│   └── main_prod.dart
-├── assets/
-│   ├── dev/
-│   └── prod/
-├── test/
-├── .vscode/
-├── .idea/
-│   ├── runConfigurations/
-│   ├── caches/
-│   └── libraries/
-├── build/
-├── .git/
-│   └── refs/
-├── .gitignore
-├── .metadata
-├── AGENTS.md
-├── README.md
-├── analysis_options.yaml
-├── laporkerja-summary.md
-├── mise.toml
-├── pubspec.lock
-└── pubspec.yaml
+├── lib/                              # Flutter application code
+│   ├── core/                         # Shared utilities and constants
+│   │   ├── constants/                # App constants
+│   │   └── utils/                    # Utility classes (Result<T>, UseCase, etc.)
+│   ├── data/                         # Data layer (Clean Architecture)
+│   │   ├── datasources/              # Data sources (local/remote)
+│   │   │   ├── local/                # Local database (Drift)
+│   │   │   │   ├── dao/              # Data Access Objects
+│   │   │   │   └── app_database.dart # Drift database definition
+│   │   │   └── services/             # Remote services (Supabase)
+│   │   ├── mappers/                  # Data mappers (Entity ↔ Model)
+│   │   └── repositories/             # Repository implementations
+│   ├── domain/                       # Domain layer (Clean Architecture)
+│   │   ├── entities/                 # Business entities
+│   │   ├── repositories/             # Repository interfaces
+│   │   └── usecases/                 # Business logic use cases
+│   │       ├── client/               # Client-related use cases
+│   │       ├── income/               # Income-related use cases
+│   │       ├── project/              # Project-related use cases
+│   │       ├── task/                 # Task-related use cases
+│   │       └── time_entry/           # Time entry-related use cases
+│   ├── presentation/                 # Presentation layer
+│   │   ├── pages/                    # UI pages/screens
+│   │   │   ├── clients/              # Client management pages
+│   │   │   ├── incomes/              # Income management pages
+│   │   │   ├── main_page/            # Main dashboard
+│   │   │   ├── projects/             # Project management pages
+│   │   │   ├── tasks/                # Task management pages
+│   │   │   └── time_entries/         # Time tracking pages
+│   │   └── providers/                # Riverpod state providers
+│   │       ├── repositories/         # Repository providers
+│   │       ├── router/               # Navigation provider
+│   │       ├── ui/                   # UI state providers
+│   │       └── usecases/             # Use case providers
+│   ├── app.dart                      # Main app widget
+│   ├── bootstrap.dart                # App initialization
+│   ├── main_dev.dart                 # Development entry point
+│   └── main_prod.dart                # Production entry point
+├── assets/                           # Static assets
+│   ├── dev/                          # Development environment files
+│   └── prod/                         # Production environment files
+├── test/                             # Unit and integration tests
+│   ├── core/                         # Core utilities tests
+│   ├── data/                         # Data layer tests
+│   │   ├── mappers/                  # Mapper tests
+│   │   └── repositories/             # Repository tests
+│   └── domain/                       # Domain layer tests
+│       ├── entities/                 # Entity tests
+│       └── usecases/                 # Use case tests
+├── assets/                           # Static assets
+│   ├── dev/                          # Development environment files
+│   └── prod/                         # Production environment files
+├── .vscode/                          # VS Code configuration
+├── .gitignore                        # Git ignore rules
+├── .metadata                         # Flutter project metadata
+├── AGENTS.md                         # Agent guidelines for coding assistants
+├── README.md                         # Project documentation
+├── analysis_options.yaml             # Dart analysis configuration
+├── laporkerja-summary.md             # Project summary
+├── mise.toml                         # Mise version manager config
+├── pubspec.lock                      # Dependency lock file
+├── pubspec.yaml                      # Flutter dependencies and config
+├── test_coverage_report.md           # Test coverage report
+├── todo.md                           # Project todo list
+└── tutorial-konfigurasi-supabase-laporkerja.pdf  # Supabase setup tutorial
 ```
 
 ## Code Style

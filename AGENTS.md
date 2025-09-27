@@ -13,84 +13,16 @@
 ## Code Style
 - **Imports**: Group by type (dart, flutter, third-party, local) with blank lines between groups
 - **Naming**: camelCase for variables/functions, PascalCase for classes, snake_case for files
-- **Types**: Use explicit types for public APIs, `const` for compile-time constants
+- **Types**: Explicit types for public APIs, `const` for compile-time constants
 - **Widgets**: Use `const` constructors when possible, prefer `StatelessWidget` over `StatefulWidget`
-- **State management**: Use Riverpod providers, avoid setState in complex widgets
-- **Error handling**: Use `Result<T>` for repository operations, try-catch for other async operations, throw custom exceptions
-- **Annotations**: Use `@freezed` for data classes, `@JsonSerializable` for JSON models, `@DriftTable` for database entities
-- **Formatting**: Follow dartfmt output, 2-space indentation, 80-char line limit
-- **Documentation**: Use `///` for public APIs, avoid inline comments unless complex logic
+- **State management**: Riverpod providers, avoid setState in complex widgets
+- **Error handling**: `Result<T>` for repositories, try-catch for async ops, custom exceptions
+- **Annotations**: `@freezed` for data classes, `@JsonSerializable` for JSON models, `@DriftTable` for DB entities
+- **Formatting**: Follow dartfmt, 2-space indentation, 80-char line limit
+- **Documentation**: `///` for public APIs, avoid inline comments unless complex logic
 
-## Bootstrap Initialization
-
-File `lib/bootstrap.dart` handles all app initialization before `runApp()`. Tasks performed:
-
-### 1. **WidgetsFlutterBinding.ensureInitialized()**
-   - Initialize Flutter binding for platform access before runApp
-
-### 2. **Request Permissions**
-   - `Permission.notification.request()` - for background sync notifications
-   - `Permission.ignoreBatteryOptimizations.request()` - for background tasks
-
-### 3. **Load Environment Variables**
-   - Load `.env` based on flavor:
-     - DEV: `assets/dev/.env`
-     - PROD: `assets/prod/.env`
-   - Using `dotenv.load(fileName: ...)`
-
-### 4. **Initialize Supabase**
-   - `Supabase.initialize()` with:
-     - `url`: `dotenv.env['SUPABASE_URL']!`
-     - `anonKey`: `dotenv.env['SUPABASE_ANON_KEY']!`
-
-### 5. **Run App**
-   - `runApp(ProviderScope(observers: [MyObserver()], child: await builder()))`
-
-### Important Rules:
-- **All initializations requiring platform access or early configuration MUST be done in bootstrap.dart**
-- **Do NOT initialize in service classes or providers** - use `Supabase.instance.client` directly after initialization
-- **Bootstrap handles cross-flavor configuration** for dev/prod environments
-
-## Tech Stack & Architecture
-- **Frontend**: Flutter (Dart) for cross-platform UI
-- **Backend**: Supabase (PostgreSQL, auth, realtime)
-- **Local Database**: Drift (SQLite-based, type-safe)
-- **State Management**: Riverpod with riverpod_generator
-- **Data Models**: Freezed for immutable classes
-- **Error Handling**: Result<T> for type-safe error handling in domain layer
-- **Architecture**: Offline-first (local-first, background auto-sync on app start)
-
-## Current Implementation Status
-- **Core Features Implemented**: CRUD for clients, projects, tasks, time entries, and incomes with full domain/data/presentation layers.
-- **Database**: Drift schema with tables for all entities, Supabase integration ready.
-- **Bootstrap**: Initialization handles permissions, env loading, and Supabase setup.
-- **Next Priorities**: Dashboard, active timer, notifications, background sync, reports, and invoicing.
-
-## Clean Architecture Development Guidelines
-- **Layer Order**: Always develop from the innermost layer outward to maintain dependency direction (Domain → Data → Presentation). This ensures inner layers are stable and testable before building outer layers.
-- **Domain Layer First**: Start with Entities (immutable models with Freezed), then Repository interfaces, then Use Cases. This defines business logic without external dependencies.
-- **Data Layer Second**: Implement Repository interfaces with concrete classes, Data Sources (local/remote), and Mappers. Ensure all data operations return `Result<T>` for type-safe error handling.
-- **Presentation Layer Last**: Build UI components, Providers (Riverpod), and Pages only after domain and data layers are complete. Use providers to bridge UI with use cases.
-- **Dependency Rule**: Inner layers (Domain) should not depend on outer layers (Data/Presentation). Use Dependency Injection (Riverpod providers) for inversion of control.
-- **Consistency & Readability**: Follow established patterns (e.g., Use Case structure below), use explicit types, avoid tight coupling, and ensure each layer has clear responsibilities for maintainability and learning purposes.
-- **Robustness**: Write tests for each layer (unit for domain/data, widget for presentation) before moving to the next. Use `Result<T>` to handle errors gracefully without exceptions in domain layer.
-
-## Use Case Structure Guidelines
-- **Folder Structure**: Group use cases by entity (e.g., `client/`, `project/`), then by action (e.g., `add_client/`, `update_client/`, `delete_client/`).
-- **File Separation**: Separate Params and UseCase into different files (e.g., `add_client_params.dart` and `add_client_usecase.dart`).
-- **Interface Implementation**: Use cases returning `Future<Result<...>>` must implement `UseCase<R, P>` with appropriate Params class.
-- **Get Use Cases**: Use cases for fetching data (e.g., `GetClientsUseCase`) do not need Params and can be in a single file without subfolder.
-- **Example Structure**:
-  ```
-  lib/domain/usecases/client/
-  ├── add_client/
-  │   ├── add_client_params.dart
-  │   └── add_client_usecase.dart
-  ├── update_client/
-  │   ├── update_client_params.dart
-  │   └── update_client_usecase.dart
-  ├── delete_client/
-  │   ├── delete_client_params.dart
-  │   └── delete_client_usecase.dart
-  └── get_clients_usecase.dart
-  ```
+## Architecture
+- **Tech Stack**: Flutter (Dart), Supabase (backend), Drift (local DB), Riverpod (state), Freezed (models), Result<T> (error handling)
+- **Pattern**: Clean Architecture (Domain → Data → Presentation), offline-first design
+- **Bootstrap**: All initialization in `lib/bootstrap.dart` (permissions, env loading, Supabase setup)
+- **Development**: Build domain layer first, then data, then presentation. Test each layer before proceeding.
