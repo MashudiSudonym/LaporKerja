@@ -43,7 +43,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         elevation: 0,
         actions: [
             IconButton(
-              icon: const Icon(Icons.sync, color: Colors.black),
+              icon: const Icon(Icons.sync),
               onPressed: () async {
                 final result = await ref.read(syncProvider.notifier).syncAll();
                 if (mounted) {

@@ -19,17 +19,18 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    flavorDimensions += "default"
+    flavorDimensions += "environment"
 
     productFlavors {
         create("dev") {
-            dimension = "default"
+            dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "Lapor Kerja Dev")
         }
         create("prod") {
-            dimension = "default"
+            dimension = "environment"
+            applicationIdSuffix = ".prod"
             resValue("string", "app_name", "Lapor Kerja")
         }
     }
